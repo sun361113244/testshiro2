@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link type="text/css" rel="stylesheet" href="../static/jslib/bootstrap/css/bootstrap.min.css" />
+    <script src="../static/jslib/jquery/jquery-1.11.2.min.js"></script>
+    <script  src="../static/jslib/bootstrap/js/bootstrap.min.js"></script>
+    <title>欢迎登录货运车辆超限超载非现场执法系统</title>
+</head>
+<style>
+    html {
+        background: url(../static/image/login-bg/bg-2.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+
+    body {
+        padding-top: 160px;
+        font-size: 16px;
+        font-family: "Open Sans",serif;
+        background: transparent;
+    }
+
+    h1 {
+        font-family: "Abel", Arial, sans-serif;
+        font-weight: 400;
+        font-size: 40px;
+    }
+
+    /* Override B3 .panel adding a subtly transparent background */
+    .panel {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding-bottom: 10px;
+    }
+
+    .margin-base-vertical {
+        margin: 40px 0;
+    }
+    .form-horizontal.form-bordered .form-group {
+        border-bottom:1px solid #eee;
+        margin:0
+    }
+    .form-horizontal.form-bordered .form-group:last-child {
+        border-bottom:0
+    }
+    .form-horizontal.form-bordered .form-group>.control-label {
+        padding:22px 15px 15px
+    }
+    .form-horizontal.form-bordered .form-group>div {
+        padding:15px;
+        border-left:1px solid #eee
+    }
+    .form-horizontal.form-bordered .form-group>.control-label {
+        border-right:1px solid #eee;
+        margin-right:-1px
+    }
+    .form-horizontal.form-bordered .has-feedback .form-control-feedback {
+        top:15px
+    }
+</style>
+<script language="javascript">
+    $(function(){
+        // 加载监测站名称
+        $.ajax({
+            url : "../stationController/selectAllStation",
+            dataType : "json" ,
+            async : true ,
+            success : function(data)
+            {
+                var records = data.data;
+
+                for(var elem in records)
+                {
+                    $('#reg_station').append("<option value='" +  records[elem].stationCode + "'>" + records[elem].stationName +  "</option>");
+                }
+            }
+        });
+        $('#loginName').focus();
+    });
+    function login()
+    {
+
+    }
+</script>
+<!-- start body -->
+<body>
+<!-- start container -->
+<div class="container">
+    <!-- start row -->
+    <div class="row">
+        <!-- start panel -->
+        <div class="col-md-4 col-md-offset-4 panel panel-default">
+            <h1 class="margin-base-vertical">用户登录</h1>
+            <form action = '../loginController/Login' method = "post" class = "form-inline">
+                <div class="form-group">
+                    <label for="loginName"  class="control-label">用户名:</label>
+                    <input id="loginName" name="loginName" class="form-control" placeholder="请输入用户名" type="text" style="width: 270px" value="">
+                </div>
+                <div style="height: 20px"></div>
+                <div class="form-group">
+                    <label for="loginPwd" class="control-label">密&nbsp;&nbsp;码:</label>
+                    <input id="loginPwd" name="loginPwd" type="password" class="form-control" placeholder="请输入密码" type="text" style="width: 270px" value="">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 50px;">&nbsp;&nbsp;&nbsp;登&nbsp;&nbsp;&nbsp;录&nbsp;&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-primary btn-block btn-lg" data-toggle="modal" data-target="#regiditModal">&nbsp;&nbsp;&nbsp;注&nbsp;&nbsp;&nbsp;册&nbsp;&nbsp;&nbsp;</button>
+            </form>
+            <div class="loginbm" style="font-size: small;text-align: center;padding-top: 40px">版权所有  2015  <a href="http://www.wanji.net.cn/">北京万集科技股份有限公司</a> </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end row -->
+</div>
+<!-- end container -->
+<div class="modal fade" id="regiditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">用户注册</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-bordered" data-parsley-validate="true">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4">用户姓名* :</label>
+                        <div class="col-md-6 col-sm-6">
+                            <input class="form-control" type="text" id="reg_user_name"  />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4">用户名* :</label>
+                        <div class="col-md-6 col-sm-6">
+                            <input class="form-control" type="text" id="reg_user_code" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4">密码* :</label>
+                        <div class="col-md-6 col-sm-6">
+                            <input class="form-control" type="text" id="reg_user_pawd"  />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4">确认密码* :</label>
+                        <div class="col-md-6 col-sm-6">
+                            <input class="form-control" type="text" id="data-reg_user_confirmpawd" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4">选择站点*:</label>
+                        <div class="col-md-6 col-sm-6">
+                            <select class="form-control" id="reg_station">
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">提交申请</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- end body -->
+</html>

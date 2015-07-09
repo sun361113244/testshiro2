@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sys.mapper.UpLoadUnitMapper">
+    <resultMap id="UpLoadUnitResultMap" type="sys.entity.UpLoadUnit" >
+        <id column="LSData_ID" property="lsdataId" jdbcType="INTEGER" />
+        <result column="Check_Code" property="checkCode" jdbcType="VARCHAR" />
+        <result column="Station_ID" property="stationId" jdbcType="VARCHAR" />
+        <result column="Station_Name" property="stationname" jdbcType="VARCHAR" />
+        <result column="License_Plate" property="licensePlate" jdbcType="VARCHAR" />
+        <result column="Plate_Color" property="plateColor" jdbcType="VARCHAR" />
+        <result column="Veh_Brand" property="vehBrand" jdbcType="VARCHAR" />
+        <result column="Veh_Type" property="vehType" jdbcType="VARCHAR" />
+        <result column="Enforce_Department" property="enforceDepartment" jdbcType="VARCHAR" />
+        <result column="Axle_Num" property="axleNum" jdbcType="INTEGER" />
+        <result column="Whole_Weight" property="wholeWeight" jdbcType="INTEGER" />
+        <result column="Recheck_WholeWeight" property="recheckWholeweight" jdbcType="INTEGER" />
+        <result column="Whole_Limit" property="wholeLimit" jdbcType="INTEGER" />
+        <result column="Whole_Over" property="wholeOver" jdbcType="INTEGER" />
+        <result column="Whole_Overrate" property="wholeOverrate" jdbcType="INTEGER" />
+        <result column="Init_StaffName" property="initStaffname" jdbcType="VARCHAR" />
+        <result column="Check_DT" property="checkDt" />
+        <result column="Recheck_StaffName" property="recheckStaffname" jdbcType="VARCHAR" />
+        <result column="Recheck_DT" property="recheckDt" />
+        <result column="Staff_ID" property="staffId" jdbcType="VARCHAR" />
+        <result column="Entry_DT" property="entryDt" />
+        <result column="Exit_DT" property="exitDt"/>
+        <result column="Stay_Time" property="stayTime" jdbcType="VARCHAR" />
+        <result column="Veh_Length" property="vehLength" jdbcType="INTEGER" />
+        <result column="Veh_Width" property="vehWidth" jdbcType="INTEGER" />
+        <result column="Veh_Height" property="vehHeight" jdbcType="INTEGER" />
+        <result column="IsOver" property="isover" jdbcType="INTEGER" />
+        <result column="Rated_Load" property="ratedLoad" jdbcType="INTEGER" />
+        <result column="Over_Load" property="overLoad" jdbcType="INTEGER" />
+        <result column="Goods_Name" property="goodsName" jdbcType="VARCHAR" />
+        <result column="Goods_Type" property="goodsType" jdbcType="VARCHAR" />
+        <result column="Check_Fee" property="checkFee" jdbcType="INTEGER" />
+        <result column="Pic_Path" property="picPath" jdbcType="VARCHAR" />
+        <result column="Video_Path" property="videoPath" jdbcType="VARCHAR" />
+        <result column="VehOwner_Name" property="vehownerName" jdbcType="VARCHAR" />
+        <result column="State_Flag" property="stateFlag" jdbcType="INTEGER" />
+        <result column="Veh_Color" property="vehColor" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="UpLoadUnit_Column_List" >
+        LSData_ID, Check_Code, Station_ID,Station_Name, License_Plate, Plate_Color, Veh_Brand, Veh_Type,
+        Enforce_Department, Axle_Num, Whole_Weight, Recheck_WholeWeight, Whole_Limit, Whole_Over,
+        Whole_Overrate, Init_StaffName, Check_DT, Recheck_StaffName, Recheck_DT, Staff_ID,
+        Entry_DT, Exit_DT, Stay_Time, Veh_Length, Veh_Width, Veh_Height, IsOver, Rated_Load,
+        Over_Load, Goods_Name, Goods_Type, Check_Fee, Pic_Path, Video_Path, VehOwner_Name,
+        State_Flag, Veh_Color
+    </sql>
+    <select id="selectMonthTotalOnStations" resultType="java.lang.Integer" parameterType="java.util.List">
+        SELECT count(*) FROM ls_data
+        WHERE DATE_FORMAT(Check_DT,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m')
+        AND Station_ID IN
+        <foreach collection="list" item="departmentItem"  open="(" separator="," close=")">
+            #{departmentItem.code ,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+    <select id="selectMonthNoneReCheckOnActiveUserStations" resultType="java.lang.Integer" parameterType="java.util.List">
+        SELECT count(*) FROM ls_data
+        WHERE DATE_FORMAT(Check_DT,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m') and Recheck_WholeWeight = 0
+        AND Station_ID IN
+        <foreach collection="list" item="departmentItem"  open="(" separator="," close=")">
+            #{departmentItem.code ,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+    <select id="selectVehMonthCountOnActiveUserStations" resultType="sys.entity.VehMonthCount" parameterType="java.util.List">
+        SELECT MONTH(Check_DT) AS month ,COUNT(*) AS vehCount FROM ls_data
+        WHERE Station_ID IN
+        <foreach collection="list" item="departmentItem"  open="(" separator="," close=")">
+            #{departmentItem.code ,jdbcType=VARCHAR}
+        </foreach>
+        GROUP BY MONTH(Check_DT)
+    </select>
+    <select id="selectByTermsOnActiveUser"  resultMap="UpLoadUnitResultMap" parameterType="map">
+        select
+        <include refid="UpLoadUnit_Column_List"/>
+        from ls_data
+        <where>
+            <if test="station_Id != null and station_Id != '' and station_Id != '-1'" >
+                Station_ID = #{station_Id,jdbcType=VARCHAR} and
+            </if>
+            <if test="license_plate != null and license_plate != ''" >
+                License_Plate = #{license_plate,jdbcType=VARCHAR} and
+            </if>
+            <if test="axle_num != null and axle_num != -1"  >
+                Axle_Num = #{axle_num,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_weight_from != null" >
+                Whole_Weight &gt;= #{whole_weight_from,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_weight_to != null" >
+                Whole_Weight  &lt; #{whole_weight_to,jdbcType=INTEGER} and
+            </if>
+            <if test="recheck_wholeWeight_from != null" >
+                Recheck_WholeWeight &gt;= #{recheck_wholeWeight_from,jdbcType=INTEGER} and
+            </if>
+            <if test="recheck_wholeWeight_to != null" >
+                Recheck_WholeWeight  &lt; #{recheck_wholeWeight_to,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_over_from != null" >
+                Whole_Over &gt;= #{whole_over_from,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_over_to != null" >
+                Whole_Over &lt; #{whole_over_to,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_overrate_from != null" >
+                Whole_Overrate &gt;= #{whole_overrate_from,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_overrate_to != null" >
+                Whole_Overrate &lt; #{whole_overrate_to,jdbcType=INTEGER} and
+            </if>
+            <if test="isover != null and isover != -1" >
+                IsOver = #{isover,jdbcType=INTEGER} and
+            </if>
+            <if test="vehowner_name != null and vehowner_name != ''" >
+                VehOwner_Name = #{vehowner_name,jdbcType=VARCHAR}  and
+            </if>
+            <if test="check_dt_from != null " >
+                Check_DT &gt;= #{check_dt_from,jdbcType=VARCHAR} and
+            </if>
+            <if test="check_dt_to != null " >
+                Check_DT &lt; #{check_dt_to,jdbcType=VARCHAR} and
+            </if>
+            <if test="recheck_dt_from != null " >
+                Recheck_DT &gt;= #{recheck_dt_from,jdbcType=VARCHAR} and
+            </if>
+            <if test="recheck_dt_to != null " >
+                Recheck_DT &lt; #{recheck_dt_to,jdbcType=VARCHAR} and
+            </if>
+            1 = 1
+            AND Station_ID IN
+            <foreach collection="stations" item="stationItem"  open="(" separator="," close=")">
+                #{stationItem.code ,jdbcType=VARCHAR}
+            </foreach>
+        </where>
+        limit #{start},#{length}
+    </select>
+    <select id="selectWhereCountOnActiveUser" resultType="java.lang.Integer">
+        select
+        COUNT(*)
+        from ls_data
+        <where>
+            <if test="station_Id != null and station_Id != '' and station_Id != '-1'" >
+                Station_ID = #{station_Id,jdbcType=VARCHAR} and
+            </if>
+            <if test="license_plate != null and license_plate != ''" >
+                License_Plate = #{license_plate,jdbcType=VARCHAR} and
+            </if>
+            <if test="axle_num != null and axle_num != -1"  >
+                Axle_Num = #{axle_num,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_weight_from != null" >
+                Whole_Weight &gt;= #{whole_weight_from,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_weight_to != null" >
+                Whole_Weight  &lt; #{whole_weight_to,jdbcType=INTEGER} and
+            </if>
+            <if test="recheck_wholeWeight_from != null" >
+                Recheck_WholeWeight &gt;= #{recheck_wholeWeight_from,jdbcType=INTEGER} and
+            </if>
+            <if test="recheck_wholeWeight_to != null" >
+                Recheck_WholeWeight  &lt; #{recheck_wholeWeight_to,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_over_from != null" >
+                Whole_Over &gt;= #{whole_over_from,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_over_to != null" >
+                Whole_Over &lt; #{whole_over_to,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_overrate_from != null" >
+                Whole_Overrate &gt;= #{whole_overrate_from,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_overrate_to != null" >
+                Whole_Overrate &lt; #{whole_overrate_to,jdbcType=INTEGER} and
+            </if>
+            <if test="isover != null and isover != -1" >
+                IsOver = #{isover,jdbcType=INTEGER} and
+            </if>
+            <if test="vehowner_name != null and vehowner_name != ''" >
+                VehOwner_Name = #{vehowner_name,jdbcType=VARCHAR}  and
+            </if>
+            <if test="check_dt_from != null " >
+                Check_DT &gt;= #{check_dt_from,jdbcType=VARCHAR} and
+            </if>
+            <if test="check_dt_to != null " >
+                Check_DT &lt; #{check_dt_to,jdbcType=VARCHAR} and
+            </if>
+            <if test="recheck_dt_from != null " >
+                Recheck_DT &gt;= #{recheck_dt_from,jdbcType=VARCHAR} and
+            </if>
+            <if test="recheck_dt_to != null " >
+                Recheck_DT &lt; #{recheck_dt_to,jdbcType=VARCHAR} and
+            </if>
+            1 = 1
+            AND Station_ID IN
+            <foreach collection="stations" item="stationItem"  open="(" separator="," close=")">
+                #{stationItem.code ,jdbcType=VARCHAR}
+            </foreach>
+        </where>
+    </select>
+    <select id="selectStatisticBaseMonrh" resultType="sys.entity.MonthlyStatistic" parameterType="map">
+        SELECT DATE_FORMAT(Check_DT,'%d') AS daily,SUM(Whole_Weight)/1000 AS firstCheckSum,
+        SUM(Recheck_WholeWeight)/1000 AS reCheckSum , SUM(Whole_Weight + Recheck_WholeWeight)/1000 AS sumCheckSum,
+        COUNT(*) AS vehCount
+        FROM ls_data
+        WHERE DATE_FORMAT(Check_DT,'%m') = #{month , jdbcType=INTEGER}
+        AND Station_ID IN
+        <foreach collection="departments" item="departmentItem"  open="(" separator="," close=")">
+            #{departmentItem.code ,jdbcType=VARCHAR}
+        </foreach>
+        GROUP BY daily;
+    </select>
+    <select id="selectIsExist" resultType="java.lang.Integer" parameterType="map">
+        SELECT count(*) from ls_data
+        where Check_Code = #{checkCode  ,jdbcType=VARCHAR} and Whole_Weight = #{wholeWeight ,jdbcType=INTEGER}
+        and Recheck_WholeWeight = #{recheckWholeweight,jdbcType=INTEGER}
+    </select>
+    <insert id="insertSelective" parameterType="sys.entity.UpLoadUnit" >
+        insert into ls_data
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="checkCode != null" >
+                Check_Code,
+            </if>
+            <if test="stationId != null" >
+                Station_ID,
+            </if>
+            <if test="stationname != null" >
+                Station_Name,
+            </if>
+            <if test="licensePlate != null" >
+                License_Plate,
+            </if>
+            <if test="plateColor != null" >
+                Plate_Color,
+            </if>
+            <if test="vehBrand != null" >
+                Veh_Brand,
+            </if>
+            <if test="vehType != null" >
+                Veh_Type,
+            </if>
+            <if test="enforceDepartment != null" >
+                Enforce_Department,
+            </if>
+            <if test="axleNum != null" >
+                Axle_Num,
+            </if>
+            <if test="wholeWeight != null" >
+                Whole_Weight,
+            </if>
+            <if test="recheckWholeweight != null" >
+                Recheck_WholeWeight,
+            </if>
+            <if test="wholeLimit != null" >
+                Whole_Limit,
+            </if>
+            <if test="wholeOver != null" >
+                Whole_Over,
+            </if>
+            <if test="wholeOverrate != null" >
+                Whole_Overrate,
+            </if>
+            <if test="initStaffname != null" >
+                Init_StaffName,
+            </if>
+            <if test="checkDt != null" >
+                Check_DT,
+            </if>
+            <if test="recheckStaffname != null" >
+                Recheck_StaffName,
+            </if>
+            <if test="recheckDt != null" >
+                Recheck_DT,
+            </if>
+            <if test="staffId != null" >
+                Staff_ID,
+            </if>
+            <if test="entryDt != null" >
+                Entry_DT,
+            </if>
+            <if test="exitDt != null" >
+                Exit_DT,
+            </if>
+            <if test="stayTime != null" >
+                Stay_Time,
+            </if>
+            <if test="vehLength != null" >
+                Veh_Length,
+            </if>
+            <if test="vehWidth != null" >
+                Veh_Width,
+            </if>
+            <if test="vehHeight != null" >
+                Veh_Height,
+            </if>
+            <if test="isover != null" >
+                IsOver,
+            </if>
+            <if test="ratedLoad != null" >
+                Rated_Load,
+            </if>
+            <if test="overLoad != null" >
+                Over_Load,
+            </if>
+            <if test="goodsName != null" >
+                Goods_Name,
+            </if>
+            <if test="goodsType != null" >
+                Goods_Type,
+            </if>
+            <if test="checkFee != null" >
+                Check_Fee,
+            </if>
+            <if test="picPath != null" >
+                Pic_Path,
+            </if>
+            <if test="videoPath != null" >
+                Video_Path,
+            </if>
+            <if test="vehownerName != null" >
+                VehOwner_Name,
+            </if>
+            <if test="stateFlag != null" >
+                State_Flag,
+            </if>
+            <if test="vehColor != null" >
+                Veh_Color,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="checkCode != null" >
+                #{checkCode,jdbcType=VARCHAR},
+            </if>
+            <if test="stationId != null" >
+                #{stationId,jdbcType=VARCHAR},
+            </if>
+            <if test="stationname != null" >
+                #{stationname ,jdbcType=VARCHAR },
+            </if>
+            <if test="licensePlate != null" >
+                #{licensePlate,jdbcType=VARCHAR},
+            </if>
+            <if test="plateColor != null" >
+                #{plateColor,jdbcType=VARCHAR},
+            </if>
+            <if test="vehBrand != null" >
+                #{vehBrand,jdbcType=VARCHAR},
+            </if>
+            <if test="vehType != null" >
+                #{vehType,jdbcType=VARCHAR},
+            </if>
+            <if test="enforceDepartment != null" >
+                #{enforceDepartment,jdbcType=VARCHAR},
+            </if>
+            <if test="axleNum != null" >
+                #{axleNum,jdbcType=INTEGER},
+            </if>
+            <if test="wholeWeight != null" >
+                #{wholeWeight,jdbcType=INTEGER},
+            </if>
+            <if test="recheckWholeweight != null" >
+                #{recheckWholeweight,jdbcType=INTEGER},
+            </if>
+            <if test="wholeLimit != null" >
+                #{wholeLimit,jdbcType=INTEGER},
+            </if>
+            <if test="wholeOver != null" >
+                #{wholeOver,jdbcType=INTEGER},
+            </if>
+            <if test="wholeOverrate != null" >
+                #{wholeOverrate,jdbcType=INTEGER},
+            </if>
+            <if test="initStaffname != null" >
+                #{initStaffname,jdbcType=VARCHAR},
+            </if>
+            <if test="checkDt != null" >
+                #{checkDt},
+            </if>
+            <if test="recheckStaffname != null" >
+                #{recheckStaffname,jdbcType=VARCHAR},
+            </if>
+            <if test="recheckDt != null" >
+                #{recheckDt},
+            </if>
+            <if test="staffId != null" >
+                #{staffId,jdbcType=VARCHAR},
+            </if>
+            <if test="entryDt != null" >
+                #{entryDt},
+            </if>
+            <if test="exitDt != null" >
+                #{exitDt},
+            </if>
+            <if test="stayTime != null" >
+                #{stayTime,jdbcType=VARCHAR},
+            </if>
+            <if test="vehLength != null" >
+                #{vehLength,jdbcType=INTEGER},
+            </if>
+            <if test="vehWidth != null" >
+                #{vehWidth,jdbcType=INTEGER},
+            </if>
+            <if test="vehHeight != null" >
+                #{vehHeight,jdbcType=INTEGER},
+            </if>
+            <if test="isover != null" >
+                #{isover,jdbcType=INTEGER},
+            </if>
+            <if test="ratedLoad != null" >
+                #{ratedLoad,jdbcType=INTEGER},
+            </if>
+            <if test="overLoad != null" >
+                #{overLoad,jdbcType=INTEGER},
+            </if>
+            <if test="goodsName != null" >
+                #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsType != null" >
+                #{goodsType,jdbcType=VARCHAR},
+            </if>
+            <if test="checkFee != null" >
+                #{checkFee,jdbcType=INTEGER},
+            </if>
+            <if test="picPath != null" >
+                #{picPath,jdbcType=VARCHAR},
+            </if>
+            <if test="videoPath != null" >
+                #{videoPath,jdbcType=VARCHAR},
+            </if>
+            <if test="vehownerName != null" >
+                #{vehownerName,jdbcType=VARCHAR},
+            </if>
+            <if test="stateFlag != null" >
+                #{stateFlag,jdbcType=INTEGER},
+            </if>
+            <if test="vehColor != null" >
+                #{vehColor,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <delete id="deleteByCheckCode" parameterType="java.lang.String">
+        delete from ls_data
+        where Check_Code =#{checkCode ,jdbcType=VARCHAR}
+    </delete>
+</mapper>

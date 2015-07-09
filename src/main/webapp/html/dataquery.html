@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    <link href="../static/jslib/jquery-ui/jquery-ui.css"  rel="stylesheet"/>
+    <link href="../static/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/jslib/fontawesome4.2/css/font-awesome.css" rel="stylesheet">
+    <link href="../static/jslib/animate/animate.css" rel="stylesheet">
+    <link href="../static/css/style.min.css" rel="stylesheet">
+    <link href="../static/css/theme/default.css" rel="stylesheet">
+    <!-- ================== END BASE CSS STYLE ================== -->
+
+    <!-- ================== BEGIN PAGE LEVEL CSS STYLE ================== -->
+    <link href="../static/jslib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
+    <link href="../static/jslib/dataTables-1.10.7/css/jquery.dataTables.min.css" rel="stylesheet"/>
+    <link href="../static/jslib/video/build/mediaelementplayer.min.css" rel="stylesheet"/>
+    <!-- ================== END PAGE LEVEL CSS STYLE ================== -->
+
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="../static/jslib/jquery/jquery-1.11.2.min.js"></script>
+    <script src="../static/jslib/jquery/jquery-migrate-1.1.0.min.js"></script>
+    <script src="../static/jslib/jquery-ui/jquery-ui.js"></script>
+    <script src="../static/jslib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../static/jslib/holder/holder.js"></script>
+    <script src="../static/jslib/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <script src="../static/jslib/jquery-cookie/jquery.cookie.js"></script>
+    <!--[if lt IE 9]> -->
+    <script src="../static/jslib/crossbrowserjs/html5shiv.js"></script>
+    <script src="../static/jslib/crossbrowserjs/respond.min.js"></script>
+    <script src="../static/jslib/crossbrowserjs/excanvas.min.js"></script>
+    <!-- <![endif] -->
+    <script src = "../static/js/util.js"></script>
+    <script src="../static/js/apps.min.js"></script>
+    <!-- ================== END BASE JS ================== -->
+
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <script src="../static/jslib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="../static/jslib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="../static/jslib/dataTables-1.10.7/js/jquery.dataTables.min.js"></script>
+    <script src="../static/jslib/video/johndyer-mediaelement-0a97cd9/build/mediaelement-and-player.min.js"></script>
+    <!-- ================== END PAGE LEVEL JS ================== -->
+    <script>
+        var srch_table;
+        function initSrchTable()
+        {
+            srch_table = $('#srch_table').dataTable( {
+                "processing": true,                 // 是否显示处理状态
+                "serverSide": true,
+                "autoWidth" : true,    //是否自适应宽度
+                "info": true,          //是否显示坐下信息
+                "scrollX": true,
+                "scrollY": "300px",                 // 垂直滚动
+                "searching" : false ,
+                "ajax": {
+                    "url": "../upLoadUnitController/selectByTerms",
+//                    "url" : "../static/json/all.json",
+                    "type": "POST",
+                    "async" : true ,
+                    "data" : function ( d )
+                    {
+                        d.station_Id = $('#srch_station_name').val();
+                        d.license_Plate = $('#srch_license_plate').val();
+                        d.axle_num = $('#srch_axle_num').val();
+                        d.whole_Weight_from = $('#srch_wholeweight_from').val();
+                        d.whole_Weight_to = $('#srch_wholeweight_to').val();
+                        d.recheck_wholeWeight_from = $('#srch_recheck_wholeweight_from').val();
+                        d.recheck_wholeWeight_to = $('#srch_recheck_wholeweight_to').val();
+                        d.whole_over_from = $('#srch_wholeover_from').val();
+                        d.whole_over_to = $('#srch_wholeover_to').val();
+                        d.whole_overrate_from = $('#srch_wholeoverrate_from').val();
+                        d.whole_overrate_to = $('#srch_wholeoverrate_to').val();
+                        d.vehowner_name = $('#srch_vehowner_name').val();
+                        d.isover = $('#srch_isover').val();
+                        d.check_DT_from = $('#srch_checkdt_from').val();
+                        d.check_DT_to = $('#srch_checkdt_to').val();
+                        d.recheck_DT_from = $('#srch_recheckdt_from').val();
+                        d.recheck_DT_to = $('#srch_recheckdt_to').val();
+                    }
+                },
+                "language" : {
+                    "emptyTable": "无数据可显示" ,
+                    "info" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                    "infoEmpty" : "记录数为0",
+                    "infoFiltered" : "(全部记录数 _MAX_ 条)",
+                    "loadingRecords": "正在加载数据，请稍后....",
+                    "processing" : "数据处理中，请稍后......",
+                    "search" : "查询",
+                    "lengthMenu" :  "每页显示 _MENU_ 条记录",
+                    "zeroRecords": "没有检索到数据",
+                    "paginate" :
+                    {
+                        "first" : "首页",
+                        "last" : "尾页",
+                        "next" : "下页",
+                        "previous" : "上页"
+                    }
+                },
+                "columns": [
+                    {
+                        "visible" : false,
+                        "data": "checkCode" ,
+                        "title" : "检测单号",
+                        "orderable": false
+                    },
+                    {
+                        "data": "stationName" ,
+                        "title" : "监测站名称",
+                        "orderable": false
+                    },
+                    {
+                        "data": "licensePlate" ,
+                        "title" : "车牌号",
+                        "orderable": false
+                    },
+                    {
+                        "data": "axleNum" ,
+                        "title" : "轴数",
+                        "orderable": false
+                    },
+                    {
+                        "data": "wholeWeight" ,
+                        "title" : "初检总重",
+                        "orderable": false
+                    },
+                    {
+                        "data": "recheckWholeweight" ,
+                        "title" : "复检总重",
+                        "orderable": false
+                    },
+                    {
+                        "data": "wholeLimit" ,
+                        "title" : "车辆限重",
+                        "orderable": false
+                    },
+                    {
+                        "data": "wholeOver" ,
+                        "title" : "初检超限",
+                        "orderable": false
+                    },
+                    {
+                        "data": "wholeOverrate" ,
+                        "title" : "初检超限率",
+                        "orderable": false
+                    },
+                    {
+                        "data": "initStaffname" ,
+                        "title" : "初检操作员",
+                        "orderable": false
+                    },
+                    {
+                        "data": "checkDt" ,
+                        "title" : "初检时间",
+                        "orderable": false ,
+                        "render": function (data, type, row) {
+                            var date = new Date(data);
+                            return date.toLocaleString();
+                        }
+                    },
+                    {
+                        "data": "recheckStaffname" ,
+                        "title" : "复检操作员",
+                        "orderable": false
+                    },
+                    {
+                        "data": "recheckDt" ,
+                        "title" : "复检时间",
+                        "orderable": false ,
+                        "render": function (data, type, row) {
+                            var date = new Date(data);
+                            return date.toLocaleString();
+                        }
+                    },
+                    {
+                        "data": "isover" ,
+                        "title" : "初检超限标志",
+                        "orderable": false
+                    },
+                    {
+                        "data": "vehownerName" ,
+                        "title" : "车主姓名",
+                        "orderable": false
+                    },
+                    {
+                        "visible" : false,
+                        "data": "picPath" ,
+                        "title" : "picPath",
+                        "orderable": false
+                    },
+                    {
+                        "visible" : false,
+                        "data": "vehBrand" ,
+                        "title" : "vehBrand",
+                        "orderable": false
+                    },
+                    {
+                        "visible" : false,
+                        "data": "entryDt" ,
+                        "title" : "entryDt",
+                        "orderable": false
+                    },
+                    {
+                        "visible" : false,
+                        "data": "goodsType" ,
+                        "title" : "goodsType",
+                        "orderable": false
+                    },
+                    {
+                        "visible" : false,
+                        "data": "videoPath" ,
+                        "title" : "videoPath",
+                        "orderable": false
+                    }
+                ]
+            } );
+
+            // 单行选中变色
+            $('#srch_table tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    srch_table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+
+            // 双击弹出modual
+            $('#srch_table tbody').on('dblclick', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    srch_table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+                var selecteditem = $('#srch_table').DataTable().row(this).data();
+
+                $('#modal_stationId').html(selecteditem.stationId);
+                $('#modal_licensePlate').html(selecteditem.licensePlate);
+                $('#modal_axleNum').html(selecteditem.axleNum);
+                $('#modal_wholeWeight').html(selecteditem.wholeWeight);
+                $('#modal_recheckWholeweight').html(selecteditem.recheckWholeweight);
+                $('#modal_wholeLimit').html(selecteditem.wholeLimit);
+                $('#modal_wholeOver').html(selecteditem.wholeOver);
+                $('#modal_wholeOverrate').html(selecteditem.wholeOverrate);
+                $('#modal_initStaffname').html(selecteditem.initStaffname);
+
+                var checkDate = new Date(selecteditem.checkDt);
+                $('#modal_checkDt').html(checkDate.toLocaleString());
+                $('#modal_recheckStaffname').html(selecteditem.recheckStaffname);
+
+                var reCheckDate = new Date(selecteditem.recheckDt);
+                $('#modal_recheckDt').html(reCheckDate.toLocaleString());
+                $('#modal_isover').html("超限");
+                $('#modal_vehownerName').html(selecteditem.vehownerName);
+
+                $('#modal_vehBrand').html(selecteditem.vehBrand);
+
+                var entryDate = new Date(selecteditem.entryDt);
+                $('#modal_entryDt').html(entryDate.toLocaleString());
+                $('#modal_goodsType').html(selecteditem.goodsType);
+
+                var picPath = selecteditem.picPath;
+                var videoPath = selecteditem.videoPath;
+                $('#player1').attr("src" ,videoPath + "InitVideo.mp4");
+                $('#player1').attr("poster" ,picPath + "InitCH1.jpg");
+                $('#player2').attr("src" ,videoPath + "UnloadVideo.mp4");
+                $('#player2').attr("poster" ,picPath + "UnloadCH1.jpg");
+                $('#player3').attr("src" ,videoPath + "RecheckVideo.mp4");
+                $('#player3').attr("poster" ,picPath + "RecheckCH1.jpg");
+                $('#firstPic1').attr("src" , picPath + "InitCH1.jpg");
+                $('#firstPic2').attr("src" , picPath + "InitCH2.jpg");
+                $('#uploadPic').attr("src" , picPath + "UnloadCH1.jpg");
+                $('#recheckPic1').attr("src" , picPath + "RecheckCH1.jpg");
+                $('#recheckPic2').attr("src" , picPath + "RecheckCH2.jpg");
+                $('#vehSrchDetial').modal('show');
+            });
+
+        }
+        function initComponent()
+        {
+            $('#srch_checkdt_from').datetimepicker({
+                format : "yyyy-mm-dd hh:ii",
+                language : "zh-CN",
+                todayBtn : true,
+                todayHighlight : true
+            });
+            $('#srch_checkdt_to').datetimepicker({
+                format : "yyyy-mm-dd hh:ii",
+                language : "zh-CN",
+                todayBtn : true,
+                todayHighlight : true
+            });
+            $('#srch_recheckdt_from').datetimepicker({
+                format : "yyyy-mm-dd hh:ii",
+                language : "zh-CN",
+                todayBtn : true,
+                todayHighlight : true
+            });
+            $('#srch_recheckdt_to').datetimepicker({
+                format : "yyyy-mm-dd hh:ii",
+                language : "zh-CN",
+                todayBtn : true,
+                todayHighlight : true
+            });
+
+            // 加载监测站名称
+            $.ajax({
+                url : "../stationController/selectAllStationOnActiveUser",
+                dataType : "json" ,
+                async : true ,
+                success : function(data)
+                {
+                    var records = data.data;
+
+                    for(var elem in records)
+                    {
+                        $('#srch_station_name').append("<option value='" +  records[elem].code + "'>" + records[elem].name +  "</option>");
+                    }
+                }
+            });
+
+            initSrchTable();
+//        initMediaPlayer();
+        }
+        function searchItems()
+        {
+            srch_table.api().ajax.reload();
+        }
+        $(function(){
+            initComponent();
+            App.init(3);
+        })
+        function printCheck()
+        {
+            var mdata={
+                stationName : $('#modal_stationId').html(),
+                licensePlate :  $('#modal_licensePlate').html(),
+                axle : $('#modal_axleNum').html(),
+                vehBrand : $('#modal_vehBrand').html(),
+                goodsType : $('#modal_goodsType').html(),
+                Whole_Limit : $('#modal_wholeLimit').html(),
+                VehOwnerName : $('#modal_vehownerName').html(),
+
+                Entry_DT : $('#modal_entryDt').html(),
+                InitStaffName : $('#modal_initStaffname').html(),
+                checkDt : $('#modal_checkDt').html(),
+                Whole_Weight : $('#modal_wholeWeight').html(),
+                WholeOver : $('#modal_wholeOver').html() ,
+                WholeOverRate : $('#modal_wholeOverrate').html() ,
+
+                RecheckWholeweight : $('#modal_recheckWholeweight').html(),
+                reStaffName : $('#modal_recheckStaffname').html(),
+                reCheckDt : $('#modal_recheckDt').html(),
+                isover : $('#modal_isover').html(),
+
+                picPath1 : $('#firstPic1').attr('src') ,
+                picPath2 : $('#firstPic2').attr('src'),
+                rePicPath1 : $('#recheckPic1').attr('src') ,
+                rePicPath2 : $('#recheckPic2').attr('src')
+            };
+            window.showModalDialog(getContextPath() + "/html/print/infoCheck.html", mdata,
+                    "location:No;status:No;help:No;dialogWidth:700px;dialogHeight:600px;scroll:auto;");
+        }
+    </script>
+    <title></title>
+</head>
+<body>
+<!-- begin #page-loader -->
+<div id="page-loader" class="fade in">
+    <span class="spinner"></span>
+</div>
+<!-- end #page-loader -->
+<!-- begin #page-container -->
+<div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
+    <!-- begin #header -->
+    <div id="header" class="header navbar navbar-inverse navbar-fixed-top">
+        <!-- begin container-fluid -->
+        <div class="container-fluid">
+            <!-- begin mobile sidebar expand / collapse button -->
+            <div class="navbar-header">
+                <a href="#" class="navbar-brand"><span class="navbar-logo"></span>卸货管理平台</a>
+                <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
+                    <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar">
+                        </span>
+                </button>
+            </div>
+            <!-- end mobile sidebar expand / collapse button -->
+            <!-- begin header navigation right -->
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form class="navbar-form full-width">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="输入关键字"/>
+                            <button type="submit" class="btn btn-search">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </li>
+                <li class="dropdown navbar-user"><a href="javascript;" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="hidden-xs activeUserName">Admin</span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu animated fadeInLeft">
+                        <li class="arrow"></li>
+                        <li><a href="javascript;">设置</a></li>
+                        <li class="divider"></li>
+                        <li><a href="../logout" >注销</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- end header navigation right -->
+        </div>
+        <!-- end container-fluid -->
+    </div>
+    <!-- end #header -->
+    <!-- begin #sidebar -->
+    <div id="sidebar" class="sidebar">
+        <!-- begin sidebar scrollbar -->
+        <div data-scrollbar="true" data-height="100%">
+            <!-- begin sidebar user -->
+            <ul class="nav">
+                <li class="nav-profile">
+                    <div class="info activeUserName">
+                        admin
+                        <small>万集研发工程师</small>
+                    </div>
+                </li>
+            </ul>
+            <!-- end sidebar user -->
+            <!-- begin sidebar nav -->
+            <ul id="menuList" class="nav">
+
+            </ul>
+            <!-- end sidebar nav -->
+        </div>
+        <!-- end sidebar scrollbar -->
+    </div>
+    <div class="sidebar-bg">
+    </div>
+    <!-- end #sidebar -->
+    <!-- begin #content -->
+    <div id="content" class="content">
+        <!-- begin row -->
+        <div class="row">
+            <!-- begin col-12 -->
+            <div class="col-md-12">
+                <!-- begin panel -->
+                <div class="panel panel-inverse">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">站点信息</h4>
+                    </div>
+                    <div class="panel-body">
+                        <form class = "form-inline">
+                            <div class="form-group">
+                                <label for="srch_station_name" class="control-label">监测站名称:</label>
+                                <select id = "srch_station_name" class="form-control">
+                                    <option value = '-1'>全部</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="srch_license_plate" class="control-label">车牌号:</label>
+                                <input id="srch_license_plate" class="form-control" type="text" style="width: 90px">
+                            </div>
+                            <div class="form-group">
+                                <label for="srch_axle_num" class="control-label">轴数:</label>
+                                <select id = "srch_axle_num"  class="form-control">
+                                    <option value = '-1'>全部</option>
+                                    <option value = '2'>2</option>
+                                    <option value = '3'>3</option>
+                                    <option value = '4'>4</option>
+                                    <option value = '5'>5</option>
+                                    <option value = '6'>6</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="srch_wholeweight_from" class="control-label">初检总重:</label>
+                                <div class="input-group">
+                                    <input id="srch_wholeweight_from" class="form-control" type="text" style="width: 70px">
+                                    <div class="input-group-addon">kg</div>
+                                </div>
+                                <label for="srch_wholeweight_to" class="control-label">~</label>
+                                <div class="input-group">
+                                    <input id="srch_wholeweight_to" class="form-control" type="text" style="width: 70px">
+                                    <div class="input-group-addon">kg</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="srch_recheck_wholeweight_from" class="control-label">复检总重:</label>
+                                <div class="input-group">
+                                    <input id="srch_recheck_wholeweight_from" class="form-control" type="text" style="width: 70px">
+                                    <div class="input-group-addon">kg</div>
+                                </div>
+                                <label for="srch_recheck_wholeweight_to" class="control-label">~</label>
+                                <div class="input-group">
+                                    <input id="srch_recheck_wholeweight_to" class="form-control" type="text" style="width: 70px">
+                                    <div class="input-group-addon">kg</div>
+                                </div>
+                            </div>
+                            <div style="height: 10px"></div>
+                            <div class="form-group">
+                                <label for="srch_wholeover_from" class="control-label">初检超限:</label>
+                                <div class="input-group">
+                                    <input id="srch_wholeover_from" class="form-control" type="text" style="width: 70px">
+                                    <div class="input-group-addon">kg</div>
+                                </div>
+                                <label for="srch_wholeover_to" class="control-label">~</label>
+                                <div class="input-group">
+                                    <input id="srch_wholeover_to" class="form-control" type="text" style="width: 70px">
+                                    <div class="input-group-addon">kg</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="srch_wholeoverrate_from" class="control-label">初检超限率:</label>
+                                <div class="input-group">
+                                    <input id="srch_wholeoverrate_from" class="form-control" type="text" style="width: 60px">
+                                    <div class="input-group-addon">%</div>
+                                </div>
+                                <label for="srch_wholeoverrate_to" class="control-label">~</label>
+                                <div class="input-group">
+                                    <input id="srch_wholeoverrate_to" class="form-control" type="text" style="width: 60px">
+                                    <div class="input-group-addon">%</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="srch_vehowner_name" class="control-label">车主姓名:</label>
+                                <input id="srch_vehowner_name" class="form-control" type="text" style="width: 70px">
+                            </div>
+                            <div class="form-group">
+                                <label for="srch_isover" class="control-label">是否超限:</label>
+                                <select id = "srch_isover"  class="form-control">
+                                    <option value="-1">全部</option>
+                                    <option value="1">是</option>
+                                    <option value="2">否</option>
+                                </select>
+                            </div>
+                            <div style="height: 10px"></div>
+                            <div class="form-group">
+                                <label for="srch_checkdt_from" class="control-label">初检时间:</label>
+                                <input id = "srch_checkdt_from" class="form-control" type="text" value="1950-06-03 21:00" >
+                                <label for="srch_checkdt_to" class="control-label">~</label>
+                                <input id = "srch_checkdt_to" class="form-control" type="text" value="2050-06-03 21:00" >
+                            </div>
+                            <div class="form-group">
+                                <label for="srch_recheckdt_from" class="control-label">复检时间:</label>
+                                <input id = "srch_recheckdt_from" class="form-control" type="text" value="1950-06-03 21:00" >
+                                <label for="srch_recheckdt_to" class="control-label">~</label>
+                                <input id = "srch_recheckdt_to" class="form-control" type="text" value="2050-06-03 21:00" >
+                            </div>
+                            <button id = 'btn_srch' type="button" class="btn btn-primary" style="margin-left: 20px" onclick="searchItems()" >查&nbsp;&nbsp;询</button>
+                            <div style="height: 20px"></div>
+                        </form>
+                        <div class="table-responsive">
+                            <table id="srch_table" cellpadding="0" cellspacing="0" class = "display"></table>
+                        </div>
+                    </div>
+                </div>
+                <!-- end panel -->
+            </div>
+            <!-- end col-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end #content -->
+</div>
+<!-- end page container -->
+
+<div class="modal fade" id="vehSrchDetial">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">车辆详细信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <p>视频1</p>
+                        <video width="200" height="150" src="../static/jslib/video/johndyer-mediaelement-0a97cd9/media/echo-hereweare.mp4" type="video/mp4"
+                               id="player1" poster="#"
+                               controls="controls" preload="none"></video>
+                    </div>
+                    <div class="col-md-4">
+                        <p>视频2</p>
+                        <video width="200" height="150" src="ftp://wanji:admin@61.133.111.82/lsCapture/2015/6/6/6/10001201506240419350019/InitVideo.mp4" type="video/mp4"
+                               id="player2" poster="#"
+                               controls="controls" preload="none"></video>
+                    </div>
+                    <div class="col-md-4">
+                        <p>视频3</p>
+                        <video width="200" height="150" src="ftp://wanji:admin@61.133.111.82/lsCapture/2015/6/6/6/10001201506240419350019/InitVideo.mp4" type="video/mp4"
+                               id="player3" poster="#"
+                               controls="controls" preload="none"></video>
+                    </div>
+                    <div style="height: 20px"></div>
+                    <div class="col-md-8">
+                        <p>车辆图片</p>
+                        <div id="myCarousel" class="carousel slide"  style="height: 288px;width:352px;">
+                            <!-- 轮播（Carousel）指标 -->
+                            <ol class="carousel-indicators">
+                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                <li data-target="#myCarousel" data-slide-to="1"></li>
+                                <li data-target="#myCarousel" data-slide-to="2"></li>
+                                <li data-target="#myCarousel" data-slide-to="3"></li>
+                                <li data-target="#myCarousel" data-slide-to="4"></li>
+                            </ol>
+                            <!-- 轮播（Carousel）项目 -->
+                            <div class="carousel-inner">
+                                <div class="item active">
+                                    <img id ="firstPic1" src="#" alt="初检图片1">
+                                    <div class="carousel-caption">初检图片1</div>
+                                </div>
+                                <div class="item">
+                                    <img id ="firstPic2" src="#" alt="初检图片2">
+                                    <div class="carousel-caption">初检图片2</div>
+                                </div>
+                                <div class="item">
+                                    <img id ="uploadPic" src="#" alt="卸货图片">
+                                    <div class="carousel-caption">卸货图片</div>
+                                </div>
+                                <div class="item">
+                                    <img id ="recheckPic1" src="#" alt="复检图片1">
+                                    <div class="carousel-caption">复检图片1</div>
+                                </div>
+                                <div class="item">
+                                    <img id ="recheckPic2" src="#" alt="复检图片2">
+                                    <div class="carousel-caption">复检图片2</div>
+                                </div>
+                            </div>
+                            <!-- 轮播（Carousel）导航 -->
+                            <a class="carousel-control left" href="#myCarousel"
+                               data-slide="prev"></a>
+                            <a class="carousel-control right" href="#myCarousel"
+                               data-slide="next"></a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div style="height: 20px"></div>
+                        <div >监测站名称：<div id = "modal_stationId" style="display:inline"></div> </div>
+                        <div >车牌号：<div id = "modal_licensePlate" style="display:inline"></div></div>
+                        <div  >轴数：<div id = "modal_axleNum" style="display:inline"></div></div>
+                        <div  >初检总重：<div id = "modal_wholeWeight" style="display:inline"></div></div>
+                        <div  >复检总重：<div id = "modal_recheckWholeweight" style="display:inline"></div></div>
+                        <div  >车辆限重：<div id = "modal_wholeLimit" style="display:inline"></div></div>
+                        <div  >初检超限：<div id = "modal_wholeOver" style="display:inline"></div></div>
+                        <div  >初检超限率：<div id = "modal_wholeOverrate" style="display:inline"></div></div>
+                        <div  >初检员：<div id = "modal_initStaffname" style="display:inline"></div></div>
+                        <div  >初检时间：<div id = "modal_checkDt" style="display:inline"></div></div>
+                        <div  >复检员：<div id = "modal_recheckStaffname" style="display:inline"></div></div>
+                        <div  >复检时间：<div id = "modal_recheckDt" style="display:inline"></div></div>
+                        <div  >是否超限：<div id = "modal_isover" style="display:inline"></div></div>
+                        <div  >车辆品牌：<div id = "modal_vehBrand" style="display:inline"></div></div>
+                        <div  >进入时间：<div id = "modal_entryDt" style="display:inline"></div></div>
+                        <div  >车主姓名：<div id = "modal_vehownerName" style="display:inline"></div></div>
+                        <div  >货物种类：<div id = "modal_goodsType" style="display:inline"></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="printCheck()">打印初检数据</button>
+                <button type="button" class="btn btn-primary"  data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('audio,video').mediaelementplayer({
+        //mode: 'shim',
+        success: function(player, node) {
+            $('#' + node.id + '-mode').html('mode: ' + player.pluginType);
+        }
+    });
+</script>
+</body>
+</html>

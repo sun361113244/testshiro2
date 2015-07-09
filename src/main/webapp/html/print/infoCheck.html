@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../../static/jslib/jquery/jquery-1.11.2.min.js"></script>
+    <style type="text/css">
+        body{background:white;margin:10px 10px;padding:0px;font-size:14px;}
+        table{
+            border-collapse:collapse;
+            border-spacing:0;
+            border-left:0px solid #000000;
+            border-top:0px solid #000000;
+            margin-top:30px;
+            width:100%;
+        }
+        td{
+            border-right:0px solid #000000;
+            border-bottom:0px solid #000000;
+            text-align:right;
+        }
+        th{
+            border-right:0px solid #000000;
+            border-bottom:0px solid #000000;
+            font-weight:bold;
+            background:#ccc;
+        }
+
+    </style>
+    <script type="text/javascript">
+
+        window.onload=function()
+        {
+            var objectsGet = window.dialogArguments;
+
+            $('#stationName').html(objectsGet.stationName);
+            $('#licensePlate').html(objectsGet.licensePlate);
+            $('#axle').html(objectsGet.axle);
+            $('#vehBrand').html(objectsGet.vehBrand);
+            $('#goodsType').html(objectsGet.goodsType);
+            $('#Whole_Limit').html(objectsGet.Whole_Limit);
+            $('#VehOwnerName').html(objectsGet.VehOwnerName);
+
+            $('#Entry_DT').html(objectsGet.Entry_DT);
+            $('#InitStaffName').html(objectsGet.InitStaffName);
+            $('#checkDt').html(objectsGet.checkDt);
+            $('#Whole_Weight').html(objectsGet.Whole_Weight);
+            $('#WholeOver').html(objectsGet.WholeOver);
+            $('#WholeOverRate').html(objectsGet.WholeOverRate);
+
+            $('#RecheckWholeweight').html(objectsGet.RecheckWholeweight);
+            $('#reStaffName').html(objectsGet.reStaffName);
+            $('#reCheckDt').html(objectsGet.reCheckDt);
+            $('#isover').html(objectsGet.isover);
+
+            $('#firstPic1').attr("src" , objectsGet.picPath1);
+            $('#firstPic2').attr("src" , objectsGet.picPath2);
+            $('#rePicPath1').attr("src" , objectsGet.rePicPath1);
+            $('#rePicPath2').attr("src" , objectsGet.rePicPath2);
+            window.print();
+        }
+    </script>
+</head>
+<body>
+    <table>
+        <tr>
+            <th colspan="6">山东省临沂市停车卸货站</th>
+        </tr>
+        <tr>
+            <th colspan="6">--------------------------------------------------------------------------</th>
+        </tr>
+        <tr>
+            <th colspan="6">车辆信息</th>
+        </tr>
+        <tr>
+            <th colspan="6">--------------------------------------------------------------------------</th>
+        </tr>
+        <tr style="height:30px">
+            <td>车牌号：</td>
+            <td style="text-align:left;"><div id="licensePlate"></div></td>
+            <td>车辆品牌：</td>
+            <td style="text-align:left;"><div id="vehBrand"></div></td>
+            <td>站点名称：</td>
+            <td style="text-align:left;"><div id="stationName"></div></td>
+        </tr>
+        <tr style="height:30px">
+            <td>轴数：</td>
+            <td style="text-align:left;"><div id="axle"></div></td>
+            <td>车辆限重：</td>
+            <td style="text-align:left;"><div id="Whole_Limit"></div></td>
+            <td>货物类别：</td>
+            <td style="text-align:left;"><div id="goodsType"></div></td>
+        </tr>
+        <tr style="height:30px">
+            <td>驾驶员：</td>
+            <td style="text-align:left;"><div id="VehOwnerName"></div></td>
+        </tr>
+        <tr>
+            <th colspan="6">--------------------------------------------------------------------------</th>
+        </tr>
+        <tr>
+            <th colspan="6">初检信息</th>
+        </tr>
+        <tr>
+            <th colspan="6">--------------------------------------------------------------------------</th>
+        </tr>
+        <tr style="height:30px">
+            <td>进场时间：</td>
+            <td style="text-align:left;"><div id="Entry_DT"></div></td>
+            <td>录入者：</td>
+            <td style="text-align:left;"><div id="InitStaffName"></div></td>
+            <td>初检时间：</td>
+            <td style="text-align:left;"><div id="checkDt"></div></td>
+        </tr>
+        <tr style="height:30px">
+            <td>实际载重量：</td>
+            <td style="text-align:left;"><div id="Whole_Weight"></div></td>
+            <td>初检超限：</td>
+            <td style="text-align:left;"><div id="WholeOver"></div></td>
+            <td>初检超限率：</td>
+            <td style="text-align:left;"><div id="WholeOverRate"></div></td>
+        </tr>
+        <tr>
+            <th colspan="6">--------------------------------------------------------------------------</th>
+        </tr>
+        <tr>
+            <td colspan="3" style="height:250px;padding-left:48px;">
+                <img id ='firstPic1' src="image/1.jpg" height="230px" width="280px"/>
+            </td>
+            <td colspan="3" style="height:250px;padding-right:48px;">
+                <img id ='firstPic2' src="image/1.jpg" height="230px" width="280px"/>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="6">--------------------------------------------------------------------------</th>
+        </tr>
+        <tr>
+            <th colspan="6">复检信息</th>
+        </tr>
+        <tr>
+            <th colspan="6">--------------------------------------------------------------------------</th>
+        </tr>
+        <tr style="height:30px">
+            <td>复检总重：</td>
+            <td style="text-align:left;"><div id="RecheckWholeweight"></div></td>
+            <td>复检员：</td>
+            <td style="text-align:left;"><div id="reStaffName"></div></td>
+            <td>复检时间：</td>
+            <td style="text-align:left;"><div id="reCheckDt"></div></td>
+        </tr>
+        <tr>
+            <th colspan="6">--------------------------------------------------------------------------</th>
+        </tr>
+        <tr>
+            <td colspan="3" style="height:250px;padding-left:48px;">
+                <img id ='rePicPath1' src="image/1.jpg" height="230px" width="280px"/>
+            </td>
+            <td colspan="3" style="height:250px;padding-right:48px;">
+                <img id ='rePicPath2' src="image/1.jpg" height="230px" width="280px"/>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

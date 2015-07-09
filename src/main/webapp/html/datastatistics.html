@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    <link href="../static/jslib/jquery-ui/jquery-ui.css"  rel="stylesheet"/>
+    <link href="../static/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/jslib/fontawesome4.2/css/font-awesome.css" rel="stylesheet">
+    <link href="../static/jslib/animate/animate.css" rel="stylesheet">
+    <link href="../static/css/style.min.css" rel="stylesheet">
+    <link href="../static/css/theme/default.css" rel="stylesheet">
+    <!-- ================== END BASE CSS STYLE ================== -->
+
+    <!-- ================== BEGIN PAGE LEVEL CSS STYLE ================== -->
+    <link href="../static/jslib/dataTables-1.10.7/css/jquery.dataTables.min.css" rel="stylesheet"/>
+    <!-- ================== END PAGE LEVEL CSS STYLE ================== -->
+
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="../static/jslib/jquery/jquery-1.11.2.min.js"></script>
+    <script src="../static/jslib/jquery/jquery-migrate-1.1.0.min.js"></script>
+    <script src="../static/jslib/jquery-ui/jquery-ui.js"></script>
+    <script src="../static/jslib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../static/jslib/holder/holder.js"></script>
+    <script src="../static/jslib/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <script src="../static/jslib/jquery-cookie/jquery.cookie.js"></script>
+    <!--[if lt IE 9]> -->
+    <script src="../static/jslib/crossbrowserjs/html5shiv.js"></script>
+    <script src="../static/jslib/crossbrowserjs/respond.min.js"></script>
+    <script src="../static/jslib/crossbrowserjs/excanvas.min.js"></script>
+    <!-- <![endif] -->
+    <script src = "../static/js/util.js"></script>
+    <script src="../static/js/apps.min.js"></script>
+    <!-- ================== END BASE JS ================== -->
+
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <script  src="../static/jslib/dataTables-1.10.7/js/jquery.dataTables.min.js"></script>
+    <!-- ================== END PAGE LEVEL JS ================== -->
+    <script>
+        var table_statistics;
+
+        $(function () {
+            App.init(4);
+            $('#statistics_month').val(getCurrentMonth());
+            table_statistics = initStatisticsTable();
+        })
+        /**
+         * 表格初始化
+         * @returns {*|jQuery}
+         */
+        function initStatisticsTable() {
+            var table = $("#tb_statistics_month").dataTable({
+                "processing": true,                 // 是否显示处理状态
+                "deferRender": true,                //延迟渲染
+                "info": true,                        //是否显示坐下信息
+                "scrollY": "350px",                 // 垂直滚动
+                "paging": false,
+                "ajax": {
+                    "url": getContextPath() + "/upLoadUnitController/selectStatisticBaseMonrh",
+//                "url": "../static/json/stations.json",
+                    "type": "POST",
+                    "dataType": "json",
+                    "async": true,
+                    "data" : function ( d )
+                    {
+                        d.month = $('#statistics_month').val();
+                    }
+                },
+                "language": {
+                    "emptyTable": "无数据可显示",
+                    "info": "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                    "paging" : false,
+                    "infoEmpty": "记录数为0",
+                    "infoFiltered": "(全部记录数 _MAX_ 条)",
+                    "loadingRecords": "正在加载数据，请稍后....",
+                    "processing": "数据处理中，请稍后......",
+                    "search": "查询",
+                    "lengthMenu": "每页显示 _MENU_ 条记录",
+                    "zeroRecords": "没有检索到数据",
+                    "paginate": {
+                        "first": "首页",
+                        "last": "尾页",
+                        "next": "下页",
+                        "previous": "上页"
+                    }
+                },
+                "columnDefs": [
+                    {
+                        "defaultContent": "",
+                        "targets": "_all"
+                    }
+                ],
+                "columns": [
+                    {
+                        "data": "daily",
+                        "title": "日期",
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        "data": "firstCheckSum",
+                        "title": "初检(吨)",
+                        "orderable": false
+                    },
+                    {
+                        "data": "reCheckSum",
+                        "title": "复检(吨)",
+                        "orderable": false
+                    },
+                    {
+                        "data": "sumCheckSum",
+                        "title": "总计(吨)",
+                        "orderable": false
+                    },
+                    {
+                        "data": "vehCount",
+                        "title": "扣车(台)",
+                        "orderable": false
+                    }
+                ]
+            });
+
+            return table;
+        }
+        function reloadStatistics()
+        {
+            table_statistics.api().ajax.reload();
+        }
+        function exportTable()
+        {
+            var loadSuccess = false;
+            $.ajax({
+                url : getContextPath() + "/upLoadUnitController/exportsStatisticBaseMonrhExcel",
+                dataType : "json" ,
+                async : false ,
+                data : { month:  $('#statistics_month').val() },
+                success : function(data)
+                {
+                    if(data.excelExport == 1)
+                    {
+                        loadSuccess = true;
+                    }
+                }
+            });
+            if(loadSuccess)
+            {
+                var excel = window.open( getContextPath() + "/static/file/monthStatistic.xls");
+            }
+            else
+            {
+                alert('导出excel失败!!');
+            }
+
+        }
+    </script>
+    <title></title>
+</head>
+<body>
+<!-- begin #page-loader -->
+<div id="page-loader" class="fade in">
+    <span class="spinner"></span>
+</div>
+<!-- end #page-loader -->
+<!-- begin #page-container -->
+<div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
+    <!-- begin #header -->
+    <div id="header" class="header navbar navbar-inverse navbar-fixed-top">
+        <!-- begin container-fluid -->
+        <div class="container-fluid">
+            <!-- begin mobile sidebar expand / collapse button -->
+            <div class="navbar-header">
+                <a href="#" class="navbar-brand"><span class="navbar-logo"></span>卸货管理平台</a>
+                <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
+                    <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar">
+                        </span>
+                </button>
+            </div>
+            <!-- end mobile sidebar expand / collapse button -->
+            <!-- begin header navigation right -->
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form class="navbar-form full-width">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="输入关键字"/>
+                            <button type="submit" class="btn btn-search">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </li>
+                <li class="dropdown navbar-user"><a href="javascript;" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="hidden-xs activeUserName">Admin</span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu animated fadeInLeft">
+                        <li class="arrow"></li>
+                        <li><a href="javascript;">设置</a></li>
+                        <li class="divider"></li>
+                        <li><a href="../logout" >注销</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- end header navigation right -->
+        </div>
+        <!-- end container-fluid -->
+    </div>
+    <!-- end #header -->
+    <!-- begin #sidebar -->
+    <div id="sidebar" class="sidebar">
+        <!-- begin sidebar scrollbar -->
+        <div data-scrollbar="true" data-height="100%">
+            <!-- begin sidebar user -->
+            <ul class="nav">
+                <li class="nav-profile">
+                    <div class="info activeUserName">
+                        admin
+                        <small>万集研发工程师</small>
+                    </div>
+                </li>
+            </ul>
+            <!-- end sidebar user -->
+            <!-- begin sidebar nav -->
+            <ul id="menuList" class="nav">
+
+            </ul>
+            <!-- end sidebar nav -->
+        </div>
+        <!-- end sidebar scrollbar -->
+    </div>
+    <div class="sidebar-bg">
+    </div>
+    <!-- end #sidebar -->
+    <!-- begin #content -->
+    <div id="content" class="content">
+        <!-- begin row -->
+        <div class="row">
+            <!-- begin col-12 -->
+            <div class="col-md-12">
+                <!-- begin panel -->
+                <div class="panel panel-inverse">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">统计信息</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div style="margin-bottom: 20px">
+                            <form action = '../upLoadUnitController/selectStatisticBaseMonrh' method = "post" class = "form-inline">
+                                <div class="form-group">
+                                    <label for="statistics_month" class="control-label">月份:</label>
+                                    <select id = "statistics_month"  class="form-control">
+                                        <option value = '1'>1月</option>
+                                        <option value = '2'>2月</option>
+                                        <option value = '3'>3月</option>
+                                        <option value = '4'>4月</option>
+                                        <option value = '5'>5月</option>
+                                        <option value = '6'>6月</option>
+                                        <option value = '7'>7月</option>
+                                        <option value = '8'>8月</option>
+                                        <option value = '9'>9月</option>
+                                        <option value = '10'>10月</option>
+                                        <option value = '11'>11月</option>
+                                        <option value = '12'>12月</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-primary" style="margin-left: 20px" onclick="reloadStatistics()">生成报表</button>
+                            </form>
+                        </div>
+                        <button type="button" class="btn btn-primary" style=" display: inline;" onclick="exportTable()">导出excel</button>
+                        <button type="button" class="btn btn-primary" style="margin-left: 20px" onclick="reloadStatistics()">打印表格</button>
+                        <div class="table-responsive">
+                            <table id="tb_statistics_month" cellpadding="0" cellspacing="0" class = "display">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- end panel -->
+            </div>
+            <!-- end col-12 -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end #content -->
+</div>
+<!-- end page container -->
+</body>
+</html>

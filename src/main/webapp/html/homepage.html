@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    <link href="../static/jslib/jquery-ui/jquery-ui.css"  rel="stylesheet"/>
+    <link href="../static/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/jslib/fontawesome4.2/css/font-awesome.css" rel="stylesheet">
+    <link href="../static/jslib/animate/animate.css" rel="stylesheet">
+    <link href="../static/css/style.min.css" rel="stylesheet">
+    <link href="../static/css/theme/default.css" rel="stylesheet">
+    <!-- ================== END BASE CSS STYLE ================== -->
+
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="../static/jslib/jquery/jquery-1.11.2.min.js"></script>
+    <script src="../static/jslib/jquery/jquery-migrate-1.1.0.min.js"></script>
+    <script src="../static/jslib/jquery-ui/jquery-ui.js"></script>
+    <script src="../static/jslib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../static/jslib/holder/holder.js"></script>
+    <script src="../static/jslib/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <script src="../static/jslib/jquery-cookie/jquery.cookie.js"></script>
+    <!--[if lt IE 9]> -->
+    <script src="../static/jslib/crossbrowserjs/html5shiv.js"></script>
+    <script src="../static/jslib/crossbrowserjs/respond.min.js"></script>
+    <script src="../static/jslib/crossbrowserjs/excanvas.min.js"></script>
+    <!-- <![endif] -->
+    <script src = "../static/js/util.js"></script>
+    <script src="../static/js/apps.min.js"></script>
+    <!-- ================== END BASE JS ================== -->
+
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <script  src="../static/jslib/echarts-2.1.10/build/dist/echarts.js"></script>
+    <!-- ================== END PAGE LEVEL JS ================== -->
+    <script>
+        // 路径配置
+        require.config({
+            paths: {
+                "echarts":  '../static/jslib/echarts-2.1.10/build/dist'
+            }
+        });
+        $(function(){
+            $.ajax({
+                url: "../upLoadUnitController/selectHomePameStatisticItem",
+//                url : "../static/json/homepage.json",
+                type: "POST",
+                dataType: "json",
+                async: true,
+                success: function (data) {
+                    $('#monthTotal').html(data.monthTotal);
+                    $('#monthNoneReCheck').html(data.monthNoneReCheck);
+
+                    initStatisticChart(data);
+                }
+            });
+
+            App.init(2);
+        })
+        function initStatisticChart(data)
+        {
+            // 使用
+            require(
+                    [
+                        'echarts',
+                        'echarts/chart/line' ,
+                        'echarts/chart/bar'
+                    ],
+                    function (ec) {
+                        // 基于准备好的dom，初始化echarts图表
+                        var myChart = ec.init(document.getElementById('statisticsmain'));
+
+                        var y1values = new Array(12);
+
+                        for(var i=0;i<12;i++)
+                        {
+                            y1values[i] = 0;
+                        }
+
+                        for(var i=0;i<data.vehMonthCounts.length;i++)
+                        {
+                            y1values[parseInt(data.vehMonthCounts[i].month-1)] = data.vehMonthCounts[i].vehCount;
+                        }
+
+                        var option = {
+                            title : {
+                                text: '超限车统计图表'
+                            },
+                            tooltip : {
+                                trigger: 'axis'
+                            },
+                            legend: {
+                                data:['超限车数量']
+                            },
+                            toolbox: {
+                                show : true,
+                                feature : {
+                                    magicType : {show: true, type: ['line', 'bar']},
+                                    restore : {show: true},
+                                    saveAsImage : {show: true}
+                                }
+                            },
+                            calculable : true,
+                            xAxis : [
+                                {
+                                    type : 'category',
+                                    data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+                                }
+                            ],
+                            yAxis : [
+                                {
+                                    type : 'value'
+                                }
+                            ],
+                            series : [
+                                {
+                                    name:'超限车数量',
+                                    type:'bar',
+                                    data: y1values,
+                                    markPoint : {
+                                        data : [
+                                            {type : 'max', name: '最大值'},
+                                            {type : 'min', name: '最小值'}
+                                        ]
+                                    },
+                                    markLine : {
+                                        data : [
+                                            {type : 'average', name: '平均值'}
+                                        ]
+                                    }
+                                }
+                            ]
+                        };
+
+
+                        // 为echarts对象加载数据
+                        myChart.setOption(option);
+                    }
+            );
+        }
+    </script>
+    <title></title>
+</head>
+<body>
+<!-- begin #page-loader -->
+<div id="page-loader" class="fade in">
+    <span class="spinner"></span>
+</div>
+<!-- end #page-loader -->
+<!-- begin #page-container -->
+<div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
+    <!-- begin #header -->
+    <div id="header" class="header navbar navbar-inverse navbar-fixed-top">
+        <!-- begin container-fluid -->
+        <div class="container-fluid">
+            <!-- begin mobile sidebar expand / collapse button -->
+            <div class="navbar-header">
+                <a href="#" class="navbar-brand"><span class="navbar-logo"></span>卸货管理平台</a>
+                <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
+                    <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar">
+                        </span>
+                </button>
+            </div>
+            <!-- end mobile sidebar expand / collapse button -->
+            <!-- begin header navigation right -->
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form class="navbar-form full-width">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="输入关键字"/>
+                            <button type="submit" class="btn btn-search">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </li>
+                <li class="dropdown navbar-user"><a href="javascript;" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="hidden-xs activeUserName">Admin</span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu animated fadeInLeft">
+                        <li class="arrow"></li>
+                        <li><a href="javascript;">设置</a></li>
+                        <li class="divider"></li>
+                        <li><a href="../logout" >注销</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- end header navigation right -->
+        </div>
+        <!-- end container-fluid -->
+    </div>
+    <!-- end #header -->
+    <!-- begin #sidebar -->
+    <div id="sidebar" class="sidebar">
+        <!-- begin sidebar scrollbar -->
+        <div data-scrollbar="true" data-height="100%">
+            <!-- begin sidebar user -->
+            <ul class="nav">
+                <li class="nav-profile">
+                    <div class="info activeUserName">
+                        admin
+                        <small>万集研发工程师</small>
+                    </div>
+                </li>
+            </ul>
+            <!-- end sidebar user -->
+            <!-- begin sidebar nav -->
+            <ul id="menuList" class="nav">
+
+            </ul>
+            <!-- end sidebar nav -->
+        </div>
+        <!-- end sidebar scrollbar -->
+    </div>
+    <div class="sidebar-bg">
+    </div>
+    <!-- end #sidebar -->
+    <!-- begin #content -->
+    <div id="content" class="content">
+        <!-- begin row -->
+        <div class="row">
+            <!-- begin col-3 -->
+            <div class="col-md-3 col-sm-6">
+                <div class="widget widget-stats bg-green">
+                    <div class="stats-icon stats-icon-lg">
+                        <i class="fa fa-globe fa-fw"></i>
+                    </div>
+                    <div  class="stats-title">
+                        本月总超限车数
+                    </div>
+                    <div id = 'monthTotal' class="stats-number">
+                        0
+                    </div>
+                </div>
+            </div>
+            <!-- end col-3 -->
+            <!-- begin col-3 -->
+            <div class="col-md-3 col-sm-6">
+                <div class="widget widget-stats bg-red">
+                    <div class="stats-icon stats-icon-lg">
+                        <i class="fa fa-tags fa-fw"></i>
+                    </div>
+                    <div class="stats-title">
+                        本月未复检超限车数
+                    </div>
+                    <div id = 'monthNoneReCheck' class="stats-number">
+                        0
+                    </div>
+                </div>
+            </div>
+            <!-- end col-3 -->
+        </div>
+        <!-- end row -->
+        <!-- begin row -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-inverse">
+                    <div class="panel-heading">
+                        每月超限车统计图
+                    </div>
+                    <div class="panel-body">
+                        <div id="statisticsmain" style="height:400px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end #content -->
+
+</div>
+<!-- end page container -->
+</body>
+</html>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - rbacdb@localhost" uuid="c8ad0d4a-fade-40c7-be2c-83c06481abbd">
+    <database-info product="MySQL" version="5.6.21" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <schema name="" catalog="rbacdb"/>
+    <table name="rbac_dep" schema="" catalog="rbacdb" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" remarks="6YOo6Zeo5ZSv5LiAaWQ=" autoIncrement="true"/>
+      <column name="code" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12" remarks="6YOo6Zeo5Luj56CB"/>
+      <column name="name" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12" remarks="6YOo6Zeo5ZCN56ew"/>
+      <column name="create_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" remarks="5Yib5bu65pe26Ze0"/>
+      <column name="update_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" remarks="5pyA6L+R5L+u5pS55pe26Ze0"/>
+      <column name="status" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6" remarks="6YOo6Zeo54q25oCBLjE65a2Y5Zyo44CCMjrkuI3lrZjlnKg="/>
+      <primary-key name="PRIMARY" columns="id"/>
+    </table>
+    <table name="rbac_log" schema="" catalog="rbacdb" type="TABLE">
+      <column name="id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="5Li76ZSu" autoIncrement="true"/>
+      <column name="op_userId" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" remarks="55So5oi35qCH56S6"/>
+      <column name="op_userName" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="55So5oi35ZCN56ew"/>
+      <column name="op_ip" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="6K6/6ZeuSVA="/>
+      <column name="op_type" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="5pON5L2c5YaF5a65"/>
+      <column name="op_content" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="5pON5L2c57G75Z6L"/>
+      <column name="op_type_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" remarks="57G75Z6L5YWz6IGU57yW5Y+3"/>
+      <column name="op_version" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" remarks="54mI5pys"/>
+      <column name="create_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" remarks="5Yib5bu65pe26Ze0"/>
+      <column name="update_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" remarks="5pu05paw5pe26Ze0"/>
+      <primary-key name="PRIMARY" columns="id"/>
+    </table>
+    <table name="rbac_role" schema="" catalog="rbacdb" type="TABLE">
+      <column name="id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="6KeS6Imy5ZSv5LiAaWQ=" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12" remarks="6KeS6Imy5ZCN56ew"/>
+      <column name="description" sqlType="VARCHAR" precision="512" scale="0" nullable="false" jdbcType="12" def="Jyc=" remarks="5o+P6L+w"/>
+      <column name="create_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" remarks="5Yib5bu65pe26Ze0"/>
+      <column name="update_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" remarks="5L+u5pS55pS55pe26Ze0"/>
+      <column name="status" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" def="MQ==" remarks="6KeS6Imy54q25oCBIDE65pyJ5pWIIDI65peg5pWI"/>
+      <primary-key name="PRIMARY" columns="id"/>
+    </table>
+    <table name="rbac_role_uri_mapping" schema="" catalog="rbacdb" type="TABLE">
+      <column name="id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="6KeS6Imy5ZKMVVJJ5YWz6IGU5ZSv5LiAaWQ=" autoIncrement="true"/>
+      <column name="role_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="6KeS6ImyaWQ="/>
+      <column name="uri_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="55So5oi3aWQsIOWtl+espuS4sg=="/>
+      <column name="create_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" remarks="5Yib5bu65pe26Ze0"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <index name="idx_roleid_userid" unique="false" columns="role_id,uri_id"/>
+    </table>
+    <table name="rbac_role_user_mapping" schema="" catalog="rbacdb" type="TABLE">
+      <column name="id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="6KeS6Imy5ZKMVVJJ5YWz6IGU5ZSv5LiAaWQ=" autoIncrement="true"/>
+      <column name="role_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="6KeS6ImyaWQ="/>
+      <column name="user_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="55So5oi3aWQ="/>
+      <column name="create_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" remarks="5Yib5bu65pe26Ze0"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <index name="idx_roleid_userid" unique="false" columns="role_id,user_id"/>
+    </table>
+    <table name="rbac_uri" schema="" catalog="rbacdb" type="TABLE">
+      <column name="id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="dXJp5ZSv5LiAaWQ=" autoIncrement="true"/>
+      <column name="parent_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" def="MA==" remarks="54i2aWQ="/>
+      <column name="name" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12" remarks="5ZCN56ew"/>
+      <column name="permission" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12" remarks="5p2D6ZmQ"/>
+      <column name="uri" sqlType="VARCHAR" precision="1024" scale="0" nullable="false" jdbcType="12" remarks="dXJp"/>
+      <column name="iconCls" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12" remarks="5YmN57yA5Zu+5qCH"/>
+      <column name="tree_code" sqlType="VARCHAR" precision="256" scale="0" nullable="false" jdbcType="12" def="Jyc=" remarks="55So5LqO5p+l6K+i5p+Q5Liq6IqC54K55LiL55qE5omA5pyJ5a2Q6IqC54K5"/>
+      <column name="show_type" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" remarks="5pi+56S657G75Z6L"/>
+      <column name="sort" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA==" remarks="5p2D6YeN77yM5o6S5bqP"/>
+      <column name="create_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" remarks="5Yib5bu65pe26Ze0"/>
+      <column name="update_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" remarks="5L+u5pS55pS55pe26Ze0"/>
+      <primary-key name="PRIMARY" columns="id"/>
+    </table>
+    <table name="rbac_user" schema="" catalog="rbacdb" type="TABLE">
+      <column name="id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="55So5oi35ZSv5LiAaWQ=" autoIncrement="true"/>
+      <column name="user_name" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12" remarks="55So5oi35ZCN56ew"/>
+      <column name="user_passwrod" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12" remarks="55So5oi35a+G56CB"/>
+      <column name="given_name" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12" remarks="55So5oi35Lit5paH5ZCN"/>
+      <column name="status" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6" remarks="55So5oi354q25oCB"/>
+      <column name="create_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" remarks="5Yib5bu65pe26Ze0"/>
+      <column name="update_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" remarks="5L+u5pS55pS55pe26Ze0"/>
+      <column name="login_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93" remarks="5LiK5qyh55m75b2V5pe26Ze0"/>
+      <column name="login_count" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" remarks="55m75b2V5qyh5pWw"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <index name="idx_user_name" unique="false" columns="user_name"/>
+    </table>
+    <table name="rbac_user_dep_mapping" schema="" catalog="rbacdb" type="TABLE">
+      <column name="id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="55So5oi35ZKM56uZ54K55YWz6IGU5ZSv5LiAaWQ=" autoIncrement="true"/>
+      <column name="user_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="55So5oi3aWQ="/>
+      <column name="dep_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="6YOo6ZeoaWQ="/>
+      <column name="create_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn" remarks="5Yib5bu65pe26Ze0"/>
+      <primary-key name="PRIMARY" columns="id"/>
+    </table>
+  </data-source>
+</component>
