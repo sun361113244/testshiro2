@@ -3,14 +3,15 @@ package sys.Util;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.util.CellRangeAddress;
-import sys.entity.MonthlyStatistic;
+import sys.entity.UpLoadUnit;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
- * Created by Csun on 2015-07-08.
+ * Created by Csun on 2015-07-10.
  */
-public class ShanDongMonthExcelTools extends ExcelTools<MonthlyStatistic>
+public class ShanDongTaizhangExcelTools extends ExcelTools<UpLoadUnit>
 {
     private HSSFCellStyle InitCaptionStyle(HSSFWorkbook wb ,HSSFSheet sheet)
     {
@@ -91,13 +92,11 @@ public class ShanDongMonthExcelTools extends ExcelTools<MonthlyStatistic>
 
         return tableContentStyle;
     }
-
-
     @Override
-    public void InitWorkBook(ArrayList<MonthlyStatistic> monthList)
+    public void InitWorkBook(ArrayList<UpLoadUnit> upLoadUnitList)
     {
         HSSFWorkbook wb = new HSSFWorkbook();  //--->创建了一个excel文件
-        HSSFSheet sheet = wb.createSheet("停车卸货场车辆管理月度汇总表");   //--->创建了一个工作簿
+        HSSFSheet sheet = wb.createSheet("停车卸货场车辆管理台账");   //--->创建了一个工作簿
 
         sheet.setDefaultColumnWidth(15);
 
@@ -115,7 +114,7 @@ public class ShanDongMonthExcelTools extends ExcelTools<MonthlyStatistic>
         row1.setHeightInPoints(30);
         HSSFCell cell1 = row1.createCell(0);   //--->创建一个单元格
         cell1.setCellStyle(captionStyle);
-        cell1.setCellValue("停车卸货场车辆管理月度汇总表");
+        cell1.setCellValue("停 车 卸 货 场 车 辆 管 理 台 账");
 
         //表格第二行
         HSSFRow row2 = sheet.createRow(1);   //--->创建一行
@@ -133,57 +132,71 @@ public class ShanDongMonthExcelTools extends ExcelTools<MonthlyStatistic>
         HSSFRow row5 = sheet.createRow(4);   //--->创建一行
         HSSFCell cell5_1 = row5.createCell(0);   //--->创建一个单元格
         cell5_1.setCellStyle(tableTitleStyle);
-        cell5_1.setCellValue("日期");
+        cell5_1.setCellValue("车号");
         HSSFCell cell5_2 = row5.createCell(1);   //--->创建一个单元格
         cell5_2.setCellStyle(tableTitleStyle);
-        cell5_2.setCellValue("初检(吨)");
+        cell5_2.setCellValue("车型");
         HSSFCell cell5_3 = row5.createCell(2);   //--->创建一个单元格
         cell5_3.setCellStyle(tableTitleStyle);
-        cell5_3.setCellValue("复检(吨)");
+        cell5_3.setCellValue("查扣时间");
         HSSFCell cell5_4 = row5.createCell(3);   //--->创建一个单元格
         cell5_4.setCellStyle(tableTitleStyle);
-        cell5_4.setCellValue("总计(吨)");
+        cell5_4.setCellValue("放行时间");
         HSSFCell cell5_5 = row5.createCell(4);   //--->创建一个单元格
         cell5_5.setCellStyle(tableTitleStyle);
-        cell5_5.setCellValue("扣车(台)");
+        cell5_5.setCellValue("期限(天)");
         HSSFCell cell5_6 = row5.createCell(5);   //--->创建一个单元格
         cell5_6.setCellStyle(tableTitleStyle);
-        cell5_6.setCellValue("天数(天)");
+        cell5_6.setCellValue("初检(吨)");
         HSSFCell cell5_7 = row5.createCell(6);   //--->创建一个单元格
         cell5_7.setCellStyle(tableTitleStyle);
-        cell5_7.setCellValue("备注");
+        cell5_7.setCellValue("复检(吨)");
+        HSSFCell cell5_8 = row5.createCell(7);   //--->创建一个单元格
+        cell5_8.setCellStyle(tableTitleStyle);
+        cell5_8.setCellValue("总计(吨)");
+        HSSFCell cell5_9 = row5.createCell(8);   //--->创建一个单元格
+        cell5_9.setCellStyle(tableTitleStyle);
+        cell5_9.setCellValue("经手人");
+        HSSFCell cell5_10 = row5.createCell(9);   //--->创建一个单元格
+        cell5_10.setCellStyle(tableTitleStyle);
+        cell5_10.setCellValue("备注");
 
-        for(int i = 0;i < monthList.size(); i ++)
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for(int i = 0;i < upLoadUnitList.size(); i ++)
         {
             HSSFRow rowContent = sheet.createRow(5 + i);   //--->创建一行
             HSSFCell cellContent_1 = rowContent.createCell(0);   //--->创建一个单元格
             cellContent_1.setCellStyle(tableContentStyle);
-            cellContent_1.setCellValue( monthList.get(i).getDaily() + "日");
+            cellContent_1.setCellValue( upLoadUnitList.get(i).getLicensePlate());
             HSSFCell cellContent_2 = rowContent.createCell(1);   //--->创建一个单元格
             cellContent_2.setCellStyle(tableContentStyle);
-            cellContent_2.setCellValue(monthList.get(i).getFirstCheckSum());
+            cellContent_2.setCellValue(upLoadUnitList.get(i).getAxleNum() + "轴");
             HSSFCell cellContent_3 = rowContent.createCell(2);   //--->创建一个单元格
             cellContent_3.setCellStyle(tableContentStyle);
-            cellContent_3.setCellValue(monthList.get(i).getReCheckSum());
+            cellContent_3.setCellValue(sdf.format(upLoadUnitList.get(i).getCheckDt()));
             HSSFCell cellContent_4 = rowContent.createCell(3);   //--->创建一个单元格
             cellContent_4.setCellStyle(tableContentStyle);
-            cellContent_4.setCellValue(monthList.get(i).getSumCheckSum());
+            cellContent_4.setCellValue(sdf.format(upLoadUnitList.get(i).getExitDt()));
             HSSFCell cellContent_5 = rowContent.createCell(4);   //--->创建一个单元格
             cellContent_5.setCellStyle(tableContentStyle);
-            cellContent_5.setCellValue(monthList.get(i).getVehCount());
+            cellContent_5.setCellValue(upLoadUnitList.get(i).getStayTime());
             HSSFCell cellContent_6 = rowContent.createCell(5);   //--->创建一个单元格
             cellContent_6.setCellStyle(tableContentStyle);
-            cellContent_6.setCellValue("");
+            cellContent_6.setCellValue(upLoadUnitList.get(i).getWholeWeight());
             HSSFCell cellContent_7 = rowContent.createCell(6);   //--->创建一个单元格
             cellContent_7.setCellStyle(tableContentStyle);
-            cellContent_7.setCellValue("");
+            cellContent_7.setCellValue(upLoadUnitList.get(i).getRecheckWholeweight());
+            HSSFCell cellContent_8 = rowContent.createCell(7);   //--->创建一个单元格
+            cellContent_8.setCellStyle(tableContentStyle);
+            cellContent_8.setCellValue(upLoadUnitList.get(i).getWholeWeight() + upLoadUnitList.get(i).getRecheckWholeweight());
+            HSSFCell cellContent_9 = rowContent.createCell(8);   //--->创建一个单元格
+            cellContent_9.setCellStyle(tableContentStyle);
+            cellContent_9.setCellValue("");
+            HSSFCell cellContent_10 = rowContent.createCell(9);   //--->创建一个单元格
+            cellContent_10.setCellStyle(tableContentStyle);
+            cellContent_10.setCellValue("");
         }
 
-        //表格第三行
-        HSSFRow rowLast = sheet.createRow(5 + monthList.size());   //--->创建一行
-        HSSFCell cellLast_1 = rowLast.createCell(0);   //--->创建一个单元格
-        cellLast_1.setCellStyle(commentsStyle);
-        cellLast_1.setCellValue("制表:_________ 审核:__________ 审批:__________");
 
         this.setWorkbook(wb);
     }

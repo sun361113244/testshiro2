@@ -52,6 +52,18 @@ public class UpLoadElemServiceImpl implements UpLoadElemService
     }
 
     @Override
+    public ArrayList<UpLoadUnit> selectByTermsAllOnActiveUser(Integer station_id, String license_plate, Integer axle_num,
+                                                              Integer whole_weight_from, Integer whole_weight_to, Integer recheck_wholeWeight_from, Integer recheck_wholeWeight_to,
+                                                              Integer whole_over_from, Integer whole_over_to, Integer whole_overrate_from, Integer whole_overrate_to,
+                                                              String check_dt_from, String check_dt_to, String recheck_dt_from, String recheck_dt_to, Integer isover, String vehowner_name,
+                                                              List<RbacDep> stations)
+    {
+        return upLoadUnitMapper.selectByTermsAllOnActiveUser(station_id, license_plate, axle_num, whole_weight_from, whole_weight_to,
+                recheck_wholeWeight_from, recheck_wholeWeight_to, whole_over_from, whole_over_to, whole_overrate_from, whole_overrate_to, check_dt_from, check_dt_to,
+                recheck_dt_from, recheck_dt_to, isover, vehowner_name, stations);
+    }
+
+    @Override
     public int selectWhereCountOnActiveUser(Integer station_id, String license_plate, Integer axle_num, Integer whole_weight_from,
                                             Integer whole_weight_to, Integer recheck_wholeWeight_from, Integer recheck_wholeWeight_to,
                                             Integer whole_over_from, Integer whole_over_to, Integer whole_overrate_from, Integer whole_overrate_to,
@@ -64,9 +76,9 @@ public class UpLoadElemServiceImpl implements UpLoadElemService
     }
 
     @Override
-    public ArrayList<MonthlyStatistic> selectStatisticBaseMonrh(Integer month, List<RbacDep> departments)
+    public ArrayList<MonthlyStatistic> selectStatisticBaseYearMonrh(Integer year , Integer month, List<RbacDep> departments)
     {
-        return upLoadUnitMapper.selectStatisticBaseMonrh(month , departments);
+        return upLoadUnitMapper.selectStatisticBaseYearMonrh(year, month, departments);
     }
 
     @Override

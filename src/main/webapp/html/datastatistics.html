@@ -55,13 +55,14 @@
                 "scrollY": "350px",                 // 垂直滚动
                 "paging": false,
                 "ajax": {
-                    "url": getContextPath() + "/upLoadUnitController/selectStatisticBaseMonrh",
+                    "url": getContextPath() + "/upLoadUnitController/selectStatisticBaseYearMonrh",
 //                "url": "../static/json/stations.json",
                     "type": "POST",
                     "dataType": "json",
                     "async": true,
                     "data" : function ( d )
                     {
+                        d.year = $('#statistics_year').val() ,
                         d.month = $('#statistics_month').val();
                     }
                 },
@@ -131,10 +132,13 @@
         {
             var loadSuccess = false;
             $.ajax({
-                url : getContextPath() + "/upLoadUnitController/exportsStatisticBaseMonrhExcel",
+                url : getContextPath() + "/upLoadUnitController/exportsStatisticBaseYearMonrhExcel",
                 dataType : "json" ,
                 async : false ,
-                data : { month:  $('#statistics_month').val() },
+                data : {
+                    year : $('#statistics_year').val() ,
+                    month:  $('#statistics_month').val()
+                },
                 success : function(data)
                 {
                     if(data.excelExport == 1)
@@ -242,7 +246,16 @@
                     </div>
                     <div class="panel-body">
                         <div style="margin-bottom: 20px">
-                            <form action = '../upLoadUnitController/selectStatisticBaseMonrh' method = "post" class = "form-inline">
+                            <form action = '../upLoadUnitController/selectStatisticBaseYearMonrh' method = "post" class = "form-inline">
+                                <div class="form-group">
+                                    <label for="statistics_year" class="control-label">年:</label>
+                                    <select id = "statistics_year"  class="form-control">
+                                        <option value = '2015'>2015年</option>
+                                        <option value = '2016'>2016年</option>
+                                        <option value = '2017'>2017年</option>
+                                        <option value = '2018'>2018年</option>
+                                    </select>
+                                </div>
                                 <div class="form-group">
                                     <label for="statistics_month" class="control-label">月份:</label>
                                     <select id = "statistics_month"  class="form-control">
@@ -264,7 +277,6 @@
                             </form>
                         </div>
                         <button type="button" class="btn btn-primary" style=" display: inline;" onclick="exportTable()">导出excel</button>
-                        <button type="button" class="btn btn-primary" style="margin-left: 20px" onclick="reloadStatistics()">打印表格</button>
                         <div class="table-responsive">
                             <table id="tb_statistics_month" cellpadding="0" cellspacing="0" class = "display">
                             </table>

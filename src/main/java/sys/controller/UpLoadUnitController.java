@@ -9,6 +9,7 @@ import org.springframework.web.context.ContextLoader;
 import org.springframework.web.servlet.ModelAndView;
 import sys.Util.ExcelTools;
 import sys.Util.ShanDongMonthExcelTools;
+import sys.Util.ShanDongTaizhangExcelTools;
 import sys.entity.ActiveUser;
 import sys.entity.MonthlyStatistic;
 import sys.entity.UpLoadUnit;
@@ -81,8 +82,8 @@ public class UpLoadUnitController
         return day;
     }
 
-    @RequestMapping("/selectStatisticBaseMonrh")
-    public ModelAndView selectStatisticBaseMonrh(Integer draw , @RequestParam("month")Integer month)
+    @RequestMapping("/selectStatisticBaseYearMonrh")
+    public ModelAndView selectStatisticBaseYearMonrh(Integer draw , @RequestParam("year")Integer year ,@RequestParam("month")Integer month)
     {
         Subject currentUser = SecurityUtils.getSubject();
         ActiveUser activeUser = (ActiveUser)currentUser.getPrincipal();
@@ -92,7 +93,7 @@ public class UpLoadUnitController
         int days = getDayOfMonth();
         ArrayList<MonthlyStatistic> monthList = new ArrayList<MonthlyStatistic>();
 
-        ArrayList<MonthlyStatistic> tempMonthList = upLoadElemService.selectStatisticBaseMonrh(month , activeUser.getDepartments());
+        ArrayList<MonthlyStatistic> tempMonthList = upLoadElemService.selectStatisticBaseYearMonrh(year, month, activeUser.getDepartments());
         for(int i = 0 ; i < days ; i++)
         {
             boolean isMonthExit = false;
@@ -116,8 +117,8 @@ public class UpLoadUnitController
         return mav;
     }
 
-    @RequestMapping("/exportsStatisticBaseMonrhExcel")
-    public ModelAndView exportsStatisticBaseMonrhExcel(@RequestParam("month")Integer month)
+    @RequestMapping("/exportsStatisticBaseYearMonrhExcel")
+    public ModelAndView exportsStatisticBaseYearMonrhExcel(@RequestParam("year")Integer year ,@RequestParam("month")Integer month)
     {
         Subject currentUser = SecurityUtils.getSubject();
         ActiveUser activeUser = (ActiveUser)currentUser.getPrincipal();
@@ -127,7 +128,7 @@ public class UpLoadUnitController
         int days = getDayOfMonth();
         ArrayList<MonthlyStatistic> monthList = new ArrayList<MonthlyStatistic>();
 
-        ArrayList<MonthlyStatistic> tempMonthList = upLoadElemService.selectStatisticBaseMonrh(month , activeUser.getDepartments());
+        ArrayList<MonthlyStatistic> tempMonthList = upLoadElemService.selectStatisticBaseYearMonrh(year, month, activeUser.getDepartments());
         for(int i = 0 ; i < days ; i++)
         {
             boolean isMonthExit = false;
@@ -162,6 +163,41 @@ public class UpLoadUnitController
         }
         return mav;
     }
+
+    @RequestMapping("/exportSrchExcelItems")
+    public ModelAndView exportSrchExcelItems(Integer draw, Integer station_Id, String license_Plate, Integer axle_num, Integer whole_Weight_from,
+                                      Integer whole_Weight_to, Integer recheck_wholeWeight_from, Integer recheck_wholeWeight_to, Integer whole_over_from,
+                                      Integer whole_over_to,Integer whole_overrate_from, Integer whole_overrate_to, String check_DT_from, String check_DT_to,
+                                      String recheck_DT_from, String recheck_DT_to, Integer isover, String vehowner_name)
+    {
+        Subject currentUser = SecurityUtils.getSubject();
+        ActiveUser activeUser = (ActiveUser)currentUser.getPrincipal();
+
+        ModelAndView mav = new ModelAndView("JsonView");
+
+        ArrayList<UpLoadUnit> upLoadUnits = upLoadElemService.selectByTermsAllOnActiveUser(station_Id, license_Plate, axle_num, whole_Weight_from, whole_Weight_to,
+                recheck_wholeWeight_from, recheck_wholeWeight_to, whole_over_from, whole_over_to, whole_overrate_from, whole_overrate_to, check_DT_from, check_DT_to,
+                recheck_DT_from, recheck_DT_to, isover, vehowner_name, activeUser.getDepartments());
+
+        ExcelTools excelTools = new ShanDongTaizhangExcelTools();
+
+        String path = ContextLoader.getCurrentWebApplicationContext().getServletContext().getContextPath() + "/static/file/srchexcel.xls";
+        excelTools.setLocalPath("D:\\apache-tomcat-7.0.56-windows-x64\\apache-tomcat-7.0.56\\webapps\\uploadpark\\static\\file\\srchexcel.xls");
+        excelTools.InitWorkBook(upLoadUnits);
+        boolean res = excelTools.writeFile();
+        if(res)
+        {
+            mav.addObject("excelExport" , 1);
+            mav.addObject("path" , path);
+        }
+        else
+        {
+            mav.addObject("excelExport" , 2);
+            mav.addObject("path" , "");
+        }
+        return mav;
+    }
+
     public int selectIsExist(String checkCode, Integer wholeWeight, Integer recheckWholeweight)
     {
         return upLoadElemService.selectIsExist(checkCode,wholeWeight,recheckWholeweight);

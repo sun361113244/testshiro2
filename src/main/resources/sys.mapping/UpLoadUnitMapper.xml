@@ -136,6 +136,69 @@
         </where>
         limit #{start},#{length}
     </select>
+    <select id="selectByTermsAllOnActiveUser" resultMap="UpLoadUnitResultMap" parameterType="map">
+        select
+        <include refid="UpLoadUnit_Column_List"/>
+        from ls_data
+        <where>
+            <if test="station_Id != null and station_Id != '' and station_Id != '-1'" >
+                Station_ID = #{station_Id,jdbcType=VARCHAR} and
+            </if>
+            <if test="license_plate != null and license_plate != ''" >
+                License_Plate = #{license_plate,jdbcType=VARCHAR} and
+            </if>
+            <if test="axle_num != null and axle_num != -1"  >
+                Axle_Num = #{axle_num,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_weight_from != null" >
+                Whole_Weight &gt;= #{whole_weight_from,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_weight_to != null" >
+                Whole_Weight  &lt; #{whole_weight_to,jdbcType=INTEGER} and
+            </if>
+            <if test="recheck_wholeWeight_from != null" >
+                Recheck_WholeWeight &gt;= #{recheck_wholeWeight_from,jdbcType=INTEGER} and
+            </if>
+            <if test="recheck_wholeWeight_to != null" >
+                Recheck_WholeWeight  &lt; #{recheck_wholeWeight_to,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_over_from != null" >
+                Whole_Over &gt;= #{whole_over_from,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_over_to != null" >
+                Whole_Over &lt; #{whole_over_to,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_overrate_from != null" >
+                Whole_Overrate &gt;= #{whole_overrate_from,jdbcType=INTEGER} and
+            </if>
+            <if test="whole_overrate_to != null" >
+                Whole_Overrate &lt; #{whole_overrate_to,jdbcType=INTEGER} and
+            </if>
+            <if test="isover != null and isover != -1" >
+                IsOver = #{isover,jdbcType=INTEGER} and
+            </if>
+            <if test="vehowner_name != null and vehowner_name != ''" >
+                VehOwner_Name = #{vehowner_name,jdbcType=VARCHAR}  and
+            </if>
+            <if test="check_dt_from != null " >
+                Check_DT &gt;= #{check_dt_from,jdbcType=VARCHAR} and
+            </if>
+            <if test="check_dt_to != null " >
+                Check_DT &lt; #{check_dt_to,jdbcType=VARCHAR} and
+            </if>
+            <if test="recheck_dt_from != null " >
+                Recheck_DT &gt;= #{recheck_dt_from,jdbcType=VARCHAR} and
+            </if>
+            <if test="recheck_dt_to != null " >
+                Recheck_DT &lt; #{recheck_dt_to,jdbcType=VARCHAR} and
+            </if>
+            1 = 1
+            AND Station_ID IN
+            <foreach collection="stations" item="stationItem"  open="(" separator="," close=")">
+                #{stationItem.code ,jdbcType=VARCHAR}
+            </foreach>
+        </where>
+    </select>
     <select id="selectWhereCountOnActiveUser" resultType="java.lang.Integer">
         select
         COUNT(*)
@@ -199,12 +262,13 @@
             </foreach>
         </where>
     </select>
-    <select id="selectStatisticBaseMonrh" resultType="sys.entity.MonthlyStatistic" parameterType="map">
+    <select id="selectStatisticBaseYearMonrh" resultType="sys.entity.MonthlyStatistic" parameterType="map">
         SELECT DATE_FORMAT(Check_DT,'%d') AS daily,SUM(Whole_Weight)/1000 AS firstCheckSum,
         SUM(Recheck_WholeWeight)/1000 AS reCheckSum , SUM(Whole_Weight + Recheck_WholeWeight)/1000 AS sumCheckSum,
         COUNT(*) AS vehCount
         FROM ls_data
         WHERE DATE_FORMAT(Check_DT,'%m') = #{month , jdbcType=INTEGER}
+        AND DATE_FORMAT(Check_DT,'%Y') = #{year ,jdbcType=INTEGER }
         AND Station_ID IN
         <foreach collection="departments" item="departmentItem"  open="(" separator="," close=")">
             #{departmentItem.code ,jdbcType=VARCHAR}
@@ -216,6 +280,7 @@
         where Check_Code = #{checkCode  ,jdbcType=VARCHAR} and Whole_Weight = #{wholeWeight ,jdbcType=INTEGER}
         and Recheck_WholeWeight = #{recheckWholeweight,jdbcType=INTEGER}
     </select>
+
     <insert id="insertSelective" parameterType="sys.entity.UpLoadUnit" >
         insert into ls_data
         <trim prefix="(" suffix=")" suffixOverrides="," >

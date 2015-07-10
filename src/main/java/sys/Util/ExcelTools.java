@@ -1,7 +1,6 @@
 package sys.Util;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import sys.entity.MonthlyStatistic;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by Csun on 2015-07-08.
  */
-public abstract class ExcelTools
+public abstract class ExcelTools<T>
 {
     private String localPath;
 
@@ -66,5 +65,5 @@ public abstract class ExcelTools
         }
     }
 
-    public abstract void InitWorkBook(ArrayList<MonthlyStatistic> monthList);
+    public abstract void InitWorkBook(ArrayList<T> monthList);
 }

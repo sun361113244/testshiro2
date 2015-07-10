@@ -7,6 +7,46 @@
     </database-info>
     <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
     <schema name="" catalog="rbacdb"/>
+    <table name="ls_data" schema="" catalog="rbacdb" type="TABLE">
+      <column name="LSData_ID" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" remarks="6Ieq5aKeSUTvvIjkuLvplK7vvIk=" autoIncrement="true"/>
+      <column name="Check_Code" sqlType="VARCHAR" precision="23" scale="0" nullable="true" jdbcType="12" remarks="5qOA5rWL5Y2V5Y+3"/>
+      <column name="Station_ID" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12" remarks="5qOA5rWL56uZ5Y+3"/>
+      <column name="Station_Name" sqlType="VARCHAR" precision="30" scale="0" nullable="true" jdbcType="12" remarks="55uR5rWL56uZ5ZCN56ew"/>
+      <column name="License_Plate" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12" remarks="6L2m54mM5Y+3"/>
+      <column name="Plate_Color" sqlType="VARCHAR" precision="10" scale="0" nullable="true" jdbcType="12" remarks="6L2m54mM6aKc6Imy"/>
+      <column name="Veh_Brand" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12" remarks="6L2m6L6G5ZOB54mM"/>
+      <column name="Veh_Type" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12" remarks="6L2m6L6G5Z6L5Y+3"/>
+      <column name="Enforce_Department" sqlType="VARCHAR" precision="40" scale="0" nullable="true" jdbcType="12" remarks="5omn5rOV6YOo6Zeo"/>
+      <column name="Axle_Num" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" remarks="6L205pWw"/>
+      <column name="Whole_Weight" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" remarks="5Yid5qOA5oC76YeN"/>
+      <column name="Recheck_WholeWeight" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" remarks="5aSN5qOA5oC76YeN"/>
+      <column name="Whole_Limit" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" remarks="6L2m6L6G6ZmQ6YeN"/>
+      <column name="Whole_Over" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" remarks="5Yid5qOA6YeN6YeP6LaF6ZmQ"/>
+      <column name="Whole_Overrate" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" remarks="5Yid5qOA6LaF6ZmQ546H"/>
+      <column name="Init_StaffName" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12" remarks="5Yid5qOA5pON5L2c5ZGY"/>
+      <column name="Check_DT" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93" def="JzE5ODAtMDEtMDEgMDA6MDA6MDAn" remarks="5Yid5qOA5pe26Ze0"/>
+      <column name="Recheck_StaffName" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12" remarks="5aSN5qOA5pON5L2c5ZGY"/>
+      <column name="Recheck_DT" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93" def="JzE5ODAtMDEtMDEgMDA6MDA6MDAn" remarks="5aSN5qOA5pe26Ze0"/>
+      <column name="Staff_ID" sqlType="VARCHAR" precision="10" scale="0" nullable="true" jdbcType="12" remarks="5ZGY5bel57yW5Y+3"/>
+      <column name="Entry_DT" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93" def="JzE5ODAtMDEtMDEgMDA6MDA6MDAn" remarks="5YWl5Zy65pe26Ze0"/>
+      <column name="Exit_DT" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93" def="JzE5ODAtMDEtMDEgMDA6MDA6MDAn" remarks="5Ye65Zy65pe26Ze0"/>
+      <column name="Stay_Time" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12" def="JzAn" remarks="5YGc55WZ5pe26Ze0"/>
+      <column name="Veh_Length" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" def="MA==" remarks="6L2m6ZW/"/>
+      <column name="Veh_Width" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" def="MA==" remarks="6L2m5a69"/>
+      <column name="Veh_Height" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" def="MA==" remarks="6L2m6auY"/>
+      <column name="IsOver" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" def="MA==" remarks="5Yid5qOA6LaF6ZmQ5qCH5b+X"/>
+      <column name="Rated_Load" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" def="MA==" remarks="5qC45a6a6L296YeN"/>
+      <column name="Over_Load" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" def="MA==" remarks="6LaF6L296YeN"/>
+      <column name="Goods_Name" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12" remarks="6LSn54mp5ZCN56ew"/>
+      <column name="Goods_Type" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12" remarks="6LSn54mp57G75Yir"/>
+      <column name="Check_Fee" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" remarks="6L+H6L2m5pS26LS5"/>
+      <column name="Pic_Path" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12" remarks="5Zu+54mH5a2Y5YKo6Lev5b6E"/>
+      <column name="Video_Path" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12" remarks="6KeG6aKR5a2Y5YKo6Lev5b6E"/>
+      <column name="VehOwner_Name" sqlType="VARCHAR" precision="40" scale="0" nullable="true" jdbcType="12" remarks="6L2m5Li75aeT5ZCN"/>
+      <column name="State_Flag" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" remarks="54q25oCB5L2N"/>
+      <column name="Veh_Color" sqlType="VARCHAR" precision="10" scale="0" nullable="true" jdbcType="12" remarks="6L2m6L6G6aKc6Imy"/>
+      <primary-key name="PRIMARY" columns="LSData_ID"/>
+    </table>
     <table name="rbac_dep" schema="" catalog="rbacdb" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" remarks="6YOo6Zeo5ZSv5LiAaWQ=" autoIncrement="true"/>
       <column name="code" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12" remarks="6YOo6Zeo5Luj56CB"/>

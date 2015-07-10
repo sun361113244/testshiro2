@@ -276,7 +276,51 @@
                 $('#recheckPic2').attr("src" , picPath + "RecheckCH2.jpg");
                 $('#vehSrchDetial').modal('show');
             });
+        }
 
+        function exportSrchExcelItems()
+        {
+            var loadSuccess = false;
+            $.ajax({
+                url : getContextPath() + "/upLoadUnitController/exportSrchExcelItems",
+                dataType : "json" ,
+                type: "POST",
+                async : false ,
+                data : {
+                    station_Id : $('#srch_station_name').val() ,
+                    license_Plate : $('#srch_license_plate').val() ,
+                    axle_num : $('#srch_axle_num').val(),
+                    whole_Weight_from : $('#srch_wholeweight_from').val(),
+                    whole_Weight_to : $('#srch_wholeweight_to').val(),
+                    recheck_wholeWeight_from : $('#srch_recheck_wholeweight_from').val(),
+                    recheck_wholeWeight_to : $('#srch_recheck_wholeweight_to').val(),
+                    whole_over_from : $('#srch_wholeover_from').val(),
+                    whole_over_to : $('#srch_wholeover_to').val(),
+                    whole_overrate_from : $('#srch_wholeoverrate_from').val(),
+                    whole_overrate_to : $('#srch_wholeoverrate_to').val(),
+                    vehowner_name : $('#srch_vehowner_name').val(),
+                    isover : $('#srch_isover').val(),
+                    check_DT_from : $('#srch_checkdt_from').val(),
+                    check_DT_to : $('#srch_checkdt_to').val(),
+                    recheck_DT_from : $('#srch_recheckdt_from').val(),
+                    recheck_DT_to : $('#srch_recheckdt_to').val()
+                },
+                success : function(data)
+                {
+                    if(data.excelExport == 1)
+                    {
+                        loadSuccess = true;
+                    }
+                }
+            });
+            if(loadSuccess)
+            {
+                var excel = window.open( getContextPath() + "/static/file/srchexcel.xls");
+            }
+            else
+            {
+                alert('导出excel失败!!');
+            }
         }
         function initComponent()
         {
@@ -548,6 +592,7 @@
                                 <input id = "srch_recheckdt_to" class="form-control" type="text" value="2050-06-03 21:00" >
                             </div>
                             <button id = 'btn_srch' type="button" class="btn btn-primary" style="margin-left: 20px" onclick="searchItems()" >查&nbsp;&nbsp;询</button>
+                            <button id = 'btn_srch_export_excel' type="button" class="btn btn-primary" style="margin-left: 20px" onclick="exportSrchExcelItems()" >导出台账</button>
                             <div style="height: 20px"></div>
                         </form>
                         <div class="table-responsive">

@@ -25,16 +25,24 @@ public interface UpLoadElemService
                                                     Integer whole_overrate_to, String check_dt_from, String check_dt_to, String recheck_dt_from, String recheck_dt_to,
                                                     Integer isover, String vehowner_name, List<RbacDep> stations);
 
+    ArrayList<UpLoadUnit> selectByTermsAllOnActiveUser( Integer station_id, String license_plate, Integer axle_num,
+                                                       Integer whole_weight_from, Integer whole_weight_to, Integer recheck_wholeWeight_from,
+                                                       Integer recheck_wholeWeight_to, Integer whole_over_from, Integer whole_over_to, Integer whole_overrate_from,
+                                                       Integer whole_overrate_to, String check_dt_from, String check_dt_to, String recheck_dt_from, String recheck_dt_to,
+                                                       Integer isover, String vehowner_name, List<RbacDep> stations);
+
+
     int selectWhereCountOnActiveUser(Integer station_id, String license_plate, Integer axle_num, Integer whole_weight_from, Integer whole_weight_to,
                                      Integer recheck_wholeWeight_from, Integer recheck_wholeWeight_to, Integer whole_over_from, Integer whole_over_to,
                                      Integer whole_overrate_from, Integer whole_overrate_to, String check_dt_from, String check_dt_to, String recheck_dt_from,
                                      String recheck_dt_to, Integer isover, String vehowner_name, List<RbacDep> stations);
 
-    ArrayList<MonthlyStatistic> selectStatisticBaseMonrh(Integer month, List<RbacDep> departments);
+    ArrayList<MonthlyStatistic> selectStatisticBaseYearMonrh(Integer year ,Integer month, List<RbacDep> departments);
 
     int selectIsExist(String checkCode, Integer wholeWeight, Integer recheckWholeweight);
 
     int insertUpLoadElem(UpLoadUnit upLoadUnit);
 
     int deleteByCheckCode(String checkCode);
+
 }
