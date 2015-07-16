@@ -147,13 +147,13 @@ public class ShanDongTaizhangExcelTools extends ExcelTools<UpLoadUnit>
         cell5_5.setCellValue("期限(天)");
         HSSFCell cell5_6 = row5.createCell(5);   //--->创建一个单元格
         cell5_6.setCellStyle(tableTitleStyle);
-        cell5_6.setCellValue("初检(吨)");
+        cell5_6.setCellValue("初检(千克)");
         HSSFCell cell5_7 = row5.createCell(6);   //--->创建一个单元格
         cell5_7.setCellStyle(tableTitleStyle);
-        cell5_7.setCellValue("复检(吨)");
+        cell5_7.setCellValue("复检(千克)");
         HSSFCell cell5_8 = row5.createCell(7);   //--->创建一个单元格
         cell5_8.setCellStyle(tableTitleStyle);
-        cell5_8.setCellValue("总计(吨)");
+        cell5_8.setCellValue("总计(千克)");
         HSSFCell cell5_9 = row5.createCell(8);   //--->创建一个单元格
         cell5_9.setCellStyle(tableTitleStyle);
         cell5_9.setCellValue("经手人");
